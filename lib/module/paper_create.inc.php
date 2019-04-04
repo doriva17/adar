@@ -72,13 +72,21 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         infomail("New user AdAr", print_r($_REQUEST, true));
     }
 }else{
-    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT Alpha2, Name FROM Countries;");
-    $countries = array();
+    $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '255';");
+    $users = array();
     $allowed = array();
-    while($item = $clist->fetch_assoc()) {
-        $countries[]=$item;
-        $allowed[]=strtolower($item['Alpha2']);
+    while($item = $lmlist->fetch_assoc()) {
+        $users[]=$item;
+        $allowed[]=strtolower($item['UserID']);
     }
+
+        $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '11';");
+        $cuser = array();
+        $allowed = array();
+        while($item = $clist->fetch_assoc()) {
+            $cuser[]=$item;
+            $allowed[]=strtolower($item['UserID']);
+        }
 
     $dummy = array(
         'dateUpload' => '',
@@ -107,9 +115,9 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('titel', 'Paper Information');
     $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
-    $GLOBALS['adlerweb']['tpl']->assign('countries', $countries);
+    $GLOBALS['adlerweb']['tpl']->assign('users', $users);
+      $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
     $GLOBALS['adlerweb']['tpl']->assign('details', $details);
     $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }
 ?>
-
