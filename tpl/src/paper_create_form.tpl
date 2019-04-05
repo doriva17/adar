@@ -6,11 +6,13 @@
         <table>
             <tr>
                 <td><label for="dateUpload">Date Upload:</label></td>
-                <td><input type="text" id="dateUpload" {if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}  /></td>
+                <td><!-- <input type="text" id="dateUpload" {if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}  /> -->
+				<script>DateInput('dateUpload', true, 'YYYY-MM-DD', '{if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}')</script></td>
               </tr>
               <tr>
                 <td><label for="dateModerated">Date Moderated:</label></td>
-                <td><input type="text" id="dateModerated" {if $details.dateModerated !== null} value="{$details.dateModerated}"{/if}  /></td>
+                <td><!--<input type="text" id="dateModerated" {if $details.dateModerated !== null} value="{$details.dateModerated}"{/if}  />-->
+				<script>DateInput('dateModerated', true, 'YYYY-MM-DD', '{if $details.dateModerated !== null} value="{$details.dateModerated}"{/if}')</script></td>
             </tr>
             <tr>
                 <td><label for="lecturerID">LecturerId:</label></td>
@@ -37,7 +39,13 @@
       </tr>
       <tr>
 				<td><label for="publishedStatus">Published Status:</label></td>
-				<td><input type="text" id="publishedStatus" {if $details.publishedStatus !== null} value="{$details.publishedStatus}"{/if} /></td>
+				<td>
+				<!-- <input type="text" id="publishedStatus" {if $details.publishedStatus !== null} value="{$details.publishedStatus}"{/if} />-->
+				<select id="publishedStatus" name="publishedStatus">
+				    <option value="" {If $details.publishedStatus == '5'}selected="selected"{/if}>NO</option> 
+				    <option value="" {If $details.publishedStatus == '5'}selected="selected"{/if}>YES</option> 
+                </select>
+				</td>
 			</tr>
       <tr>
         <td><label for="abstract">Abstract:</label></td>
