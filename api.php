@@ -169,7 +169,7 @@ elseif($requestData['source']=="users"){
 	$columns = array(
 // datatable column index  => database column name
 	0 => array(false, 'UserID', false),
-	1 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_detail&id=%s">%s</a>', array('UserID', 'Users'))),
+	1 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_create&id=%s">%s</a>', array('Users', 'Users'))),
 	2 => array(false, 'Username', false),
 	3 => array(false, 'EMail', false),
 	4 => array(false, 'roleName', false)
