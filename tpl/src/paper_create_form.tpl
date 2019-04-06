@@ -66,8 +66,14 @@
       </tr>
       <tr>
 				<td><label for="publishedStatus">Published Status:</label></td>
-				<td><input type="text" id="publishedStatus" {if $details.publishedStatus !== null} value="{$details.publishedStatus}"{/if} /></td>
-			</tr>
+				<!--td><input type="text" id="publishedStatus" {if $details.publishedStatus !== null} value="{$details.publishedStatus}"{/if} /></td-->
+<td>
+  <select id="publishedStatus" name="publishedStatus">
+      <option value="NO" {If $details.publishedStatus !== null}selected="selected"{/if}>NO</option>
+      <option value="YES" {If $details.publishedStatus !== null}selected="selected"{/if}>YES</option>
+          </select>
+</td>
+      </tr>
       <tr>
         <td><label for="abstract">Abstract:</label></td>
         <td><input type="text" id="abstract" {if $details.abstract !== null} value="{$details.abstract}"{/if} /></td>
