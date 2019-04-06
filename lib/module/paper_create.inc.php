@@ -29,7 +29,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $_REQUEST['coordinatorId'],
             $_REQUEST['clusterId'],
             $_REQUEST['publishedStatus'],
-            $_REQUEST['abstract']
+            $_REQUEST['abstract'],
         ))
     ) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');

@@ -7,15 +7,15 @@
             <tr>
                 <td><label for="Name">Name:</label></td>
                 <td><input type="text" id="Name" {if $details.Name !== null} value="{$details.Name}"{/if}  /></td>
-                <td></td>
+                <!--td></td>
                 <td><label for="Surname">Surname:</label></td>
-                <td><input type="text" id="Surname" {if $details.Surname !== null} value="{$details.Surname}"{/if}  /></td>
+                <td><input type="text" id="Surname" {if $details.Surname !== null} value="{$details.Surname}"{/if}  /></td-->
             </tr>
             <tr>
                 <td><label for="Username">Username:</label></td>
                 <td><input type="text" id="Username" {if $details.Username !== null} value="{$details.Username}"{/if} /></td>
                 <td></td>
-                
+
             </tr>
             <tr>
                 <td><label for="Password">Password:</label></td>
@@ -56,4 +56,3 @@
     <input type="hidden" name="id" value="{if $details.UserID !== null}{$details.UserID}{else}0{/if}" />
     <input type="submit" name="a" value="To capture" />
 </form>
-
