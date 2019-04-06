@@ -1,10 +1,10 @@
 <table id="itemlist"  cellpadding="0" cellspacing="0" border="0" class="display" width="100%">
     <thead>
         <tr>
-           <th>Date Moderated</th>
-            <th>Date Uploadeds</th>
+           <th>Paper ID</th>
+            <th>Date Moderated</th>
 
-            <th>Paper Id</th>
+            <th>Date Uploaded</th>
             <th>Published Status</th>
             <th>Student Number</th>
 

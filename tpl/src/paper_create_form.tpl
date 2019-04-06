@@ -17,8 +17,8 @@
                 <!--td><input type="text" id="lecturerId" {if $details.lecturerId !== null} value="{$details.lecturerId}"{/if} /></td-->
                 <td>
                   <select id="Lecturer ID" name="lecturerId">
-                          {foreach from=$users item=lm}
-                                <option value="{$c.UserID}" {If $lang == $lm.UserID}selected="selected"{/if}>{$lm.Name}</option>
+                          {foreach from=$users item=c}
+                                <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
                             {/foreach}
                             </select>
                           </td>
@@ -30,8 +30,8 @@
                 <!--td><input type="text" id="moderatorId" {if $details.moderatorId !== null} value="{$details.moderatorId}"{/if} /></td-->
                 <td>
                   <select id="Moderator ID" name="moderatorId">
-                          {foreach from=$users item=lm}
-                                <option value="{$c.UserID}" {If $lang == $lm.UserID}selected="selected"{/if}>{$lm.Name}</option>
+                          {foreach from=$users item=c}
+                                <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
                             {/foreach}
                             </select>
                           </td>
@@ -47,7 +47,7 @@
         <td>
           <select id="Coordinator ID" name="coordinatorId">
                   {foreach from=$cuser item=c}
-                        <option value="{$c.coordinatorId}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
+                        <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
                     {/foreach}
                     </select>
                   </td>
@@ -57,7 +57,7 @@
 				<td><label for="clusterId">ClusterId:</label></td>
 				<!--td><input type="text" id="clusterId" {if $details.clusterId !== null} value="{$details.clusterId}"{/if} /></td-->
         <td>
-          <select id="Cluser ID" name="clusterI">
+          <select id="Cluser ID" name="clusterId">
                   {foreach from=$cuser item=c}
                         <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
                     {/foreach}
