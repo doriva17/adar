@@ -76,7 +76,7 @@
       </tr>
       <tr>
         <td><label for="abstract">Abstract:</label></td>
-        <td><input type="text" id="abstract" {if $details.abstract !== null} value="{$details.abstract}"{/if} /></td>
+        <td><textarea name="abstract" id="abstract" {if $details.abstract !== null} value="{$details.abstract}" rows="4"  cols="50"{/if} ></textarea></td>
       </tr>
         </table>
     </fieldset><br />
