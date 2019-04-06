@@ -588,4 +588,3 @@ if(isset($requestData['draw'])) $json_data['draw'] = $requestData['draw'];
 echo json_encode($json_data);  // send data as json format
 
 ?>
-

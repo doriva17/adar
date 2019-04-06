@@ -1,4 +1,5 @@
 
+
     <div id="header_status">
         {if isset($user) && $user != ''}
             Logged in as <strong>{$user}</strong><br />
@@ -8,4 +9,3 @@
             <a href="?m=session_login"><img src="vendor/koala-framework/library-silkicons/key.png" /> Log In</a>
         {/if}
     </div>
-

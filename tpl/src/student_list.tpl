@@ -5,7 +5,7 @@
             <th>Student Number</th>
             <th>Name </th>
             <th>Surname</th>
-            <th>Gender</th>			
+            <th>Gender</th>
             <th>Course</th>
         </tr>
     </thead>
@@ -62,4 +62,3 @@
         } );
     } );
 </script>
-

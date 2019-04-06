@@ -45,4 +45,3 @@
     <input type="hidden" name="m" value="content_create" />
     <input type="submit" name="a" value="To capture" />
 </form>
-

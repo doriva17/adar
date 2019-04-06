@@ -27,4 +27,3 @@
         $GLOBALS['adlerweb']['tpl']->assign('modul', 'session_login_form');
     }
 ?>
-

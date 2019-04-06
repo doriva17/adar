@@ -4,7 +4,7 @@
         <legend>Student Registration form</legend>
         <table>
             <tr>
-                <td><label for="studentNumber">Student Numbermber:</label></td>
+                <td><label for="studentNumber">Student Numberss:</label></td>
                 <td><input type="number" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if}  /></td>
                 <td></td>
             </tr>
@@ -12,7 +12,7 @@
                 <td><label for="firstName">First Name:</label></td>
                 <td><input type="text" id="firstName" {if $details.firstName !== null} value="{$details.firstName}"{/if} /></td>
                 <td></td>
-                
+
             </tr>
             <tr>
                 <td><label for="surname">Surname:</label></td>
