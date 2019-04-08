@@ -69,8 +69,12 @@
 				<!--td><input type="text" id="publishedStatus" {if $details.publishedStatus !== null} value="{$details.publishedStatus}"{/if} /></td-->
 <td>
   <select id="publishedStatus" name="publishedStatus">
-      <option value="NO" {If $details.publishedStatus !== null}selected="selected"{/if}>NO</option>
-      <option value="YES" {If $details.publishedStatus !== null}selected="selected"{/if}>YES</option>
+      <!--option value="NO" {If $details.publishedStatus !== null}selected="selected"{/if}>NO</option>
+      <option value="YES" {If $details.publishedStatus !== null}selected="selected"{/if}>YES</option-->
+      foreach($published_status as $p){
+            <option value="{$published_status[0]}">{$published_status[0]}</option>
+            <option value="{$published_status[1]}">{$published_status[1]}</option>
+        }
           </select>
 </td>
       </tr>

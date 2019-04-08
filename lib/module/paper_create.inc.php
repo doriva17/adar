@@ -88,7 +88,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $allowed[]=strtolower($item['UserID']);
         }
 
-        
+        $published_status = array("NO","YES");
+
 
     $dummy = array(
         'dateUpload' => '',
@@ -119,6 +120,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
     $GLOBALS['adlerweb']['tpl']->assign('users', $users);
     $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
+    $GLOBALS['adlerweb']['tpl']->assign('published_status', $published_status);
     $GLOBALS['adlerweb']['tpl']->assign('details', $details);
     $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }
