@@ -169,9 +169,14 @@ elseif($requestData['source']=="users"){
 	$columns = array(
 // datatable column index  => database column name
 	0 => array(false, 'UserID', false),
-	1 => array(false, 'Name', false),
-	2 => array(false, 'Nickname', false),
-	3 => array(false, 'EMail', false)
+	1 => array(false, 'Title', false),
+	2 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_detail&id=%s">%s</a>', array('UserID', 'Users'))),
+	3 => array(false, 'Username', false),
+	4 => array(false, 'EMail', false),
+	5 => array(false, 'ContactNo', false),
+	6 => array(false, 'Image', false),
+	7 => array(false, 'roleName', false),
+	8 => array(false, 'Active', false)
 );
 
 $colout = array();
@@ -198,11 +203,14 @@ foreach($columns as $col) {
 
 $sql_data = "SELECT ";
 $sql_data .= implode(", ", $colout);
-$sql_data .= " FROM Users";
+$sql_data .= " FROM Users
+LEFT JOIN `Roles` AS `r` ON `r`.`roleID` = `users`.`Level` ";
 
 $sql_anz = "SELECT COUNT(`Users`.`UserID`) as anz ";
 
-$sql_anz .= " FROM Users ";
+$sql_anz .= " FROM Users
+LEFT JOIN `Roles` AS `r` ON `r`.`roleID` = `users`.`Level` ";
+//join roles as r on r.roleID = users.Level
 
 // getting total number records without any external filters
 //$anzq=$GLOBALS['adlerweb']['sql']->query($sql_anz.$sql_filter);
@@ -235,10 +243,20 @@ if(!empty($requestData['search']['value'])) {
     $sql_filter.="
         AND (
             `UserID` LIKE ? OR
-            `Name` LIKE ? OR
-            `Nickname` LIKE ? OR
+            `Title` LIKE ? OR
+            CONCAT(`Users`.`Name`,\", \",`Users`.`Surname`) LIKE ? OR
+            `Username` LIKE ? OR
             `EMail` LIKE ? OR
+            `ContactNo` LIKE ? OR
+            `Image` LIKE ? OR
+			`roleName` LIKE ? OR
+			`Active` LIKE ? OR
         ) ";
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
@@ -296,7 +314,7 @@ if(isset($requestData['draw'])) $json_data['draw'] = $requestData['draw'];
 
 //============================================================================================
 elseif($requestData['source']=="papers"){
-	//user management
+	//paper management
 	$columns = array(
 // datatable column index  => database column name
   0 => array(false, 'paperId', false),

@@ -56,8 +56,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `Fax` = ?,
             `Mail` = ?,
             `URL` = ?,
-            `Notes` = ?,
-            WHERE CID = ?",
+            `Notes` = ?
+            WHERE CID = ? ",
             str_repeat('s', 13).'i',
             array(
                 $_REQUEST['FamilyName'],

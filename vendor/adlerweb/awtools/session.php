@@ -71,8 +71,8 @@ class adlerweb_session {
         }
         if(!isset($GLOBALS['adlerweb']['sql'])) {
 
-        }
-        $check=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID,Password,Level,UIdent,Name FROM Users WHERE Nickname=? LIMIT 1;", 's', $user);
+        } //add active status to the where clause
+        $check=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID,Title,Name,Surname,Username,`Password`,EMail,ContactNo,Image,Active,Level FROM Users WHERE username=? LIMIT 1;", 's', $user);
         if(!$check) {
             $_SESSION['adlerweb']['session']['retrycount']++;
             $this->lasterror='User not found';
@@ -84,9 +84,11 @@ class adlerweb_session {
             return false;
         }
         $_SESSION['adlerweb']['session']['level'] = $check['Level'];
-        $_SESSION['adlerweb']['session']['short'] = $check['UIdent'];
-        $_SESSION['adlerweb']['session']['user']  = $check['Name'];
+        $_SESSION['adlerweb']['session']['image'] = $check['Image'];
+        $_SESSION['adlerweb']['session']['user']  = $check['Username'];
+        $_SESSION['adlerweb']['session']['fullname']  = $check['Name'].' '.$check['Surname'];
         $_SESSION['adlerweb']['session']['UID']   = $check['UserID'];
+		
         return true;
     }
 
@@ -164,11 +166,14 @@ class adlerweb_session {
      */
     private function smarty_repopulate() {
         if(isset($GLOBALS['adlerweb']['tpl'])) {
-            if(isset($_SESSION['adlerweb']['session']['level']) && isset($_SESSION['adlerweb']['session']['short']) && isset($_SESSION['adlerweb']['session']['user'])) {
+            if(isset($_SESSION['adlerweb']['session']['level']) && isset($_SESSION['adlerweb']['session']['fullname']) && isset($_SESSION['adlerweb']['session']['user'])) {
+				
                 $GLOBALS['adlerweb']['tpl']->assign('loginlevel', $_SESSION['adlerweb']['session']['level']);
                 $GLOBALS['adlerweb']['tpl']->assign('user', $_SESSION['adlerweb']['session']['user']);
-                $GLOBALS['adlerweb']['tpl']->assign('short', $_SESSION['adlerweb']['session']['short']); //DiBAS-Compatibility
+                //$GLOBALS['adlerweb']['tpl']->assign('short', $_SESSION['adlerweb']['session']['short']); //DiBAS-Compatibility
                 $GLOBALS['adlerweb']['tpl']->assign('UID', $_SESSION['adlerweb']['session']['UID']);
+				$GLOBALS['adlerweb']['tpl']->assign('fullname', $_SESSION['adlerweb']['session']['fullname']);
+				$GLOBALS['adlerweb']['tpl']->assign('image', $_SESSION['adlerweb']['session']['image']);
             }else{
                 $GLOBALS['adlerweb']['tpl']->assign('loginlevel', 0);
             }

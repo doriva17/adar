@@ -31,7 +31,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $_REQUEST['publishedStatus'],
             $_REQUEST['abstract']
         ))
-    ) {
+    )
+	{
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
@@ -69,7 +70,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Paper Information was successfully recorded!');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Paper Information was successfully recorded!. '.$back2);
         $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
-        infomail("New user AdAr", print_r($_REQUEST, true));
+        infomail("New Paper", print_r($_REQUEST, true));
     }
 }else{
     $clist = $GLOBALS['adlerweb']['sql']->query("SELECT Alpha2, Name FROM Countries;");

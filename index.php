@@ -40,9 +40,12 @@ if(!preg_match('/[a-z]/', $modul)) {
 }
 
 if(file_exists('lib/module/'.$modul.'.inc.php')) {
+	
     require_once('lib/module/'.$modul.'.inc.php');
 }else{
+	
     require_once('lib/module/error.inc.php');
+	
 }
 
 if(!isset($adar_notpl)) $GLOBALS['adlerweb']['tpl']->display('main.tpl');
