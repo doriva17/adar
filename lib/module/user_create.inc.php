@@ -83,7 +83,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         infomail("New user AdAr", print_r($_REQUEST, true));
     }
 }else{
-	//
+
     $rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles;");
     $roles = array();
     $allowed = array();

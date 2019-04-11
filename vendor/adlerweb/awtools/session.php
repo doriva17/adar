@@ -73,6 +73,7 @@ class adlerweb_session {
 
         } //add active status to the where clause
         $check=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID,Title,Name,Surname,Username,`Password`,EMail,ContactNo,Image,Active,Level FROM Users WHERE username=? LIMIT 1;", 's', $user);
+
         if(!$check) {
             $_SESSION['adlerweb']['session']['retrycount']++;
             $this->lasterror='User not found';

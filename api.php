@@ -170,13 +170,14 @@ elseif($requestData['source']=="users"){
 // datatable column index  => database column name
 	0 => array(false, 'UserID', false),
 	1 => array(false, 'Title', false),
-	2 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_detail&id=%s">%s</a>', array('UserID', 'Users'))),
+	2 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'Users'))),
 	3 => array(false, 'Username', false),
 	4 => array(false, 'EMail', false),
 	5 => array(false, 'ContactNo', false),
 	6 => array(false, 'Image', false),
 	7 => array(false, 'roleName', false),
 	8 => array(false, 'Active', false)
+
 );
 
 $colout = array();
@@ -252,10 +253,6 @@ if(!empty($requestData['search']['value'])) {
 			`roleName` LIKE ? OR
 			`Active` LIKE ? OR
         ) ";
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';

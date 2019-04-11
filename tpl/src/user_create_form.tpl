@@ -3,11 +3,8 @@
     <fieldset>
 
         <legend>User Information</legend>
-        <table style="width:100%">
-			<tr>  
-                <td></td>
-                <td></td>
-            </tr>
+
+        <table style="width:100%">			
             <tr>
 				<td><label for="Title">Title:</label></td>
 				<td>
@@ -58,12 +55,6 @@
                 	{foreach from=$roles item=c}
                         <option value="{$c.roleID}" {If $lang == $c.roleID}selected="selected"{/if}>{$c.roleName}</option>
                     {/foreach}
-                    <!-- <option value="0" {If $details.Level == '0'}selected="selected"{/if}>Not specified</option>
-                    <option value="1" {If $details.Level == '1'}selected="selected"{/if}>Administrator</option>
-                    <option value="2" {If $details.Level == '2'}selected="selected"{/if}>Moderator</option>
-                    <option value="3" {If $details.Level == '3'}selected="selected"{/if}>Supervisor</option>
-                    <option value="4" {If $details.Level == '4'}selected="selected"{/if}>Coordinator</option>
-                    <option value="5" {If $details.Level == '5'}selected="selected"{/if}>Student</option> -->
                 </select>
 				</td>
 			</tr>
