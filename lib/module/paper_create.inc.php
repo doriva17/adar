@@ -10,9 +10,9 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && $_REQUEST['a'] == 'To capture'
     && isset($_REQUEST['id'])
     && isset($_REQUEST['dateUpload'])
-    && isset($_REQUEST['dateModerated'])
+    //&& isset($_REQUEST['dateModerated'])
     && isset($_REQUEST['lecturerId'])
-    && isset($_REQUEST['moderatorId'])
+    //&& isset($_REQUEST['moderatorId'])
     && isset($_REQUEST['studentNumber'])
     && isset($_REQUEST['coordinatorId'])
     && isset($_REQUEST['clusterId'])
@@ -20,11 +20,11 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['abstract'])
 ) {
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 9), array(
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers VALUES ('', NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 7), array(
             $_REQUEST['dateUpload'],
-            $_REQUEST['dateModerated'],
+            //$_REQUEST['dateModerated'],
             $_REQUEST['lecturerId'],
-            $_REQUEST['moderatorId'],
+            //$_REQUEST['moderatorId'],
             $_REQUEST['studentNumber'],
             $_REQUEST['coordinatorId'],
             $_REQUEST['clusterId'],
@@ -37,9 +37,9 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
     }elseif($_REQUEST['id'] != '0' && !$GLOBALS['adlerweb']['sql']->querystmt("UPDATE papers SET
             `dateUpload` = ?,
-            `dateModerated` = ?,
+            <!--`dateModerated` = ?,-->
             `lecturerId` = ?,
-            `moderatorId` = ?,
+          <!--  `moderatorId` = ?,-->
             `studentNumber` = ?,
             `coordinatorId` = ?,
             `clusterId` = ?,
@@ -49,9 +49,9 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             str_repeat('s', 9).'i',
             array(
         $_REQUEST['dateUpload'],
-				$_REQUEST['dateModerated'],
+				//$_REQUEST['dateModerated'],
 				$_REQUEST['lecturerId'],
-				$_REQUEST['moderatorId'],
+			//	$_REQUEST['moderatorId'],
 				$_REQUEST['studentNumber'],
 				$_REQUEST['coordinatorId'],
         $_REQUEST['clusterId'],
@@ -93,9 +93,9 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
     $dummy = array(
         'dateUpload' => '',
-        'dateModerated' => '',
+        //'dateModerated' => '',
         'lecturerId' => '',
-        'moderatorId' => '',
+        //'moderatorId' => '',
         'studentNumber' => '',
         'coordinatorId' => '',
         'clusterId' => '',
