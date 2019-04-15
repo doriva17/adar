@@ -7,7 +7,7 @@
             <!--tr>
                 <td><label for="dateUpload">Date Upload:</label></td>
                 <td><input type="text" id="dateUpload" {if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}  /></td>
-              </tr-->
+              </tr--->
               <tr>
                 <td><label for="studentNumber">Student Number:</label></td>
                 <td><input type="text" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if} /></td>

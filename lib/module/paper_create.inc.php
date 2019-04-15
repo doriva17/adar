@@ -9,7 +9,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 }elseif(isset($_REQUEST['a'])
     && $_REQUEST['a'] == 'To capture'
     && isset($_REQUEST['id'])
-    && isset($_REQUEST['dateUpload'])
+    //&& isset($_REQUEST['dateUpload'])
     //&& isset($_REQUEST['dateModerated'])
     && isset($_REQUEST['lecturerId'])
     //&& isset($_REQUEST['moderatorId'])
@@ -20,8 +20,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['abstract'])
 ) {
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers VALUES ('', NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 7), array(
-            $_REQUEST['dateUpload'],
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers (dateUpload, lecturerId, studentNumber, clusterId, publishedStatus, coordinatorId, abstract) VALUES (NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 6), array(
+          //$_REQUEST['dateUpload'],
             //$_REQUEST['dateModerated'],
             $_REQUEST['lecturerId'],
             //$_REQUEST['moderatorId'],
@@ -36,7 +36,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
     }elseif($_REQUEST['id'] != '0' && !$GLOBALS['adlerweb']['sql']->querystmt("UPDATE papers SET
-            `dateUpload` = ?,
+            <!--`dateUpload` = ?,-->
             <!--`dateModerated` = ?,-->
             `lecturerId` = ?,
           <!--  `moderatorId` = ?,-->
@@ -46,7 +46,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `publishedStatus` = ?,
             `abstract` = ?
             WHERE paperId = ?",
-            str_repeat('s', 7).'i',
+            str_repeat('s', 6).'i',
             array(
         $_REQUEST['dateUpload'],
 				//$_REQUEST['dateModerated'],
