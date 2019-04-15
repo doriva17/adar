@@ -46,7 +46,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `publishedStatus` = ?,
             `abstract` = ?
             WHERE paperId = ?",
-            str_repeat('s', 9).'i',
+            str_repeat('s', 7).'i',
             array(
         $_REQUEST['dateUpload'],
 				//$_REQUEST['dateModerated'],

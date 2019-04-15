@@ -8,10 +8,7 @@
                 <td><label for="dateUpload">Date Upload:</label></td>
                 <td><input type="text" id="dateUpload" {if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}  /></td>
               </tr-->
-              <!--tr>
-                <td><label for="dateModerated">Date Moderated:</label></td>
-                <td><input type="text" id="dateModerated" {if $details.dateModerated !== null} value="{$details.dateModerated}"{/if}  /></td>
-            </tr-->
+
             <tr>
                 <td><label for="lecturerID">LecturerId:</label></td>
                 <!--td><input type="text" id="lecturerId" {if $details.lecturerId !== null} value="{$details.lecturerId}"{/if} /></td-->
@@ -24,19 +21,7 @@
                           </td>
               </tr>
 
-            </tr>
-            <!--tr>
-                <td><label for="moderatorId">ModeratorId:</label></td-->
-                <!--td><input type="text" id="moderatorId" {if $details.moderatorId !== null} value="{$details.moderatorId}"{/if} /></td-->
-                <!--td>
-                  <select id="Moderator ID" name="moderatorId">
-                          {foreach from=$users item=c}
-                                <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
-                            {/foreach}
-                            </select>
-                          </td>
-                </tr-->
-              </tr>
+
               <tr>
                 <td><label for="studentNumber">Student Number:</label></td>
                 <td><input type="text" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if} /></td>
@@ -52,7 +37,7 @@
                     </select>
                   </td>
       </tr>
-			</tr>
+
         <tr>
 				<td><label for="clusterId">ClusterId:</label></td>
 				<!--td><input type="text" id="clusterId" {if $details.clusterId !== null} value="{$details.clusterId}"{/if} /></td-->
