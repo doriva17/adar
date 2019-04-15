@@ -8,7 +8,7 @@
     if($GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'login error');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You are already registered as <strong>'.htmlentities($_SESSION['adlerweb']['session']['user']).'</strong>. '.$back);
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You are already registered as <strong>'.htmlentities($_SESSION['adlerweb']['session']['fullname']).'</strong>. '.$back);
     }elseif(isset($_SESSION['adlerweb']['session']['retrytime']) && $_SESSION['adlerweb']['session']['retrytime'] > time()) {
         $left=ceil(($_SESSION['adlerweb']['session']['retrytime']-time())/60);
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'login error');
@@ -17,7 +17,7 @@
     }elseif(isset($_POST['user']) && isset($_POST['pass']) && $_POST['user'] != '' && $_POST['pass'] != '') {
         if($GLOBALS['adlerweb']['session']->session_login($_POST['user'], $_POST['pass'])) {
             $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You have been successfully registered!'.$back2);
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You have been successfully logged in!'.$back2);
             $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
         }else{
             $GLOBALS['adlerweb']['tpl']->assign('modul', 'session_login_form');

@@ -11,6 +11,7 @@
               <tr>
                 <td><label for="studentNumber">Student Number:</label></td>
                 <td><input type="text" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if} /></td>
+
             </tr>
             <tr>
                 <td><label for="lecturerID">LecturerId:</label></td>

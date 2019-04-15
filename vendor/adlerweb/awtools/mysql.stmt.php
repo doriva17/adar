@@ -36,8 +36,8 @@ class ATK_mysql {
     
     public function __construct($serv, $user, $pass, $datb) {
 		$serv = "localhost";
-		$user = "root";
-		$pass = "";
+		$user = "adar";
+		$pass = "adar";
 		$datb = "adar";
         $this->sql = new mysqli($serv, $user, $pass, $datb);
         $this->errno = $this->sql->connect_errno;
@@ -56,6 +56,7 @@ class ATK_mysql {
      *      array containing intended variables
      *      number of elements must match character count in argument type list
      *      if only one argument is used it may be supplied as string
+     *      
      * @return bool|int|array returned data
      *         returns false if an error occours
      *         returns number of affected rows as integer for UPDATE/DELETE queries
@@ -69,6 +70,7 @@ class ATK_mysql {
      * @see http://www.moyablog.com/2012/01/20/wrapper-php-classes-for-prepared-statements-queries/
      **/
     public function querystmt($sql, $argtypes, $args) {
+		
         if(strlen($argtypes) <1) {
             $msg = '[SQL] Argument types missing';
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
@@ -80,7 +82,7 @@ class ATK_mysql {
         if(!is_array($args)) {
             $args = array($args);
         }
-
+        
         if(strlen($argtypes) != count($args)) {
             $msg = '[SQL] Argument count mismatch';
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
@@ -88,6 +90,7 @@ class ATK_mysql {
             trigger_error($msg, E_USER_ERROR);
             return false;
         }
+        
         $msg='';
         if($this->debug >= 3) $msg .= '[SQL] >>'.$sql.'<<"';
         if($this->debug >= 4) $msg .= ' - >>'.print_r($argtypes, true).'<< - >>'.print_r($args, true).'<<"';
@@ -97,19 +100,24 @@ class ATK_mysql {
         
         $stmt = $this->sql->stmt_init();
         if(!$stmt->prepare($sql)) {
+			
             $msg = $stmt->error;
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
             if($this->debug >= 2) $msg .= ' - >>'.print_r($argtypes, true).'<< - >>'.print_r($args, true).'<<"';
             trigger_error($msg, E_USER_ERROR);
+			
         }
         call_user_func_array(array($stmt, "bind_param"), $this->util_refValues(array_merge((array)$argtypes, $args)));
         
         if(!$stmt->execute()) {
+			
             $msg = $stmt->error;
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
             if($this->debug >= 2) $msg .= ' - >>'.print_r($argtypes, true).'<< - >>'.print_r($args, true).'<<"';
             trigger_error($msg, E_USER_ERROR);
+			
         }
+        
         if($type == 'INSERT') return $stmt->insert_id;
         if($type == 'UPDATE') return $stmt->affected_rows;
         if($type == 'DELETE') return $stmt->affected_rows;
@@ -132,6 +140,7 @@ class ATK_mysql {
         
         return $items;
     }
+    
     /**
      * Execute SELECT query as prepared statement and return a single element
      *
@@ -161,6 +170,7 @@ class ATK_mysql {
      **/
     function querystmt_single($sql, $argtypes, $args, $field=false) {
         $res = $this->querystmt($sql, $argtypes, $args);
+        
         if(!is_array($res)) return $res;
         if(!$field) return $res[0];
         
@@ -168,6 +178,7 @@ class ATK_mysql {
         
         return $res[0][$field];
     }
+    
     /**
      * Execute query as standard SQL query
      *
@@ -179,6 +190,7 @@ class ATK_mysql {
      *         returns mysqli_result on success
      **/
     public function query($sql) {
+		
         $ret = $this->sql->query($sql);
         if(!$ret) {
             $msg = '[SQL] SQL query error';
@@ -188,6 +200,7 @@ class ATK_mysql {
         }
         return $ret;
     }
+    
     /**
      * Execute standard SELECT query and return a single element
      *
@@ -204,32 +217,32 @@ class ATK_mysql {
     function query_single($sql, $field=false) {
         $res = $this->query($sql);
         if(!$res) return false;
-
+        
         $ret=$res->fetch_assoc();
         if(!$field) return $ret;
-
+        
         if(!isset($ret[$field])) return false;
-
+        
         return $ret[$field];
     }
-
+    
     /**
      * Internal helper for variable reference compatibility
-     *
+     * 
      * 5.3 requires array values as reference while 5.2 works with real values
-     *
+     * 
      * @see http://www.php.net/manual/de/mysqli-stmt.bind-param.php#96770
      */
-    private function util_refValues($arr) {
+    private function util_refValues($arr) {  
         if(strnatcmp(phpversion(),'5.3') >= 0) {
-            $refs = array();
-            foreach($arr as $key => $value)
-                $refs[$key] = &$arr[$key];
-            return $refs;
+            $refs = array();  
+            foreach($arr as $key => $value)  
+                $refs[$key] = &$arr[$key];  
+            return $refs;  
         }
         return $arr;
     }
-
+    
     /**
      * Check if a dataset exists
      *
@@ -256,22 +269,21 @@ class ATK_mysql {
         if(!is_array($fields)) {
             $fields = array($fields);
         }
-
-
+        
         $query = 'SELECT COUNT(`'.$this->sql->real_escape_string($fields[0]).'`) AS `count` FROM `'.$this->sql->real_escape_string($table).'` WHERE ';
-
+        
         foreach($fields as $field) {
             $field_query[] = '`'.$this->sql->real_escape_string($field).'` = ?';
         }
-
+        
         $query .= implode(' AND ', $field_query);
-
+        
         $check = $this->querystmt($query, $argtypes, $args);
-
+        
         if($check === false) return false;
         return $check[0]['count'];
     }
-
+    
     /**
      * Update or Insert a dataset
      *
@@ -297,6 +309,7 @@ class ATK_mysql {
      *      for invalid duplicates here. The keys given here must be mentioned
      *      in Fieldnames. If only one argument is used it may be supplied as
      *      string. If no argument is given all fieldnames are checked
+     *      
      * @return bool|int returned data
      *         returns false if an error occours
      *         returns number of affected rows (=1) as integer for UPDATEs
@@ -316,7 +329,6 @@ class ATK_mysql {
         }else if(!is_array($index)) {
             $index = array($index);
         }
-
         
         $index_clean_fields = array();
         $index_clean_argtype = '';
@@ -335,7 +347,7 @@ class ATK_mysql {
                 $index_clean_args[] = $args[$fi];
             }
         }
-
+        
         if(count($index_clean_fields) == 0) {
             $msg='';
             if($this->debug >= 3) $msg .= '[SQL] Update-query unsuccessful - not enough keys to compare!';
@@ -370,10 +382,12 @@ class ATK_mysql {
             for($i=0; $i<count($fieldstr); $i++) {
                 $updatestr[] = $fieldstr[$i].' = ?';
             }
+            
             $field_query = array();
             foreach($index_clean_fields as $index_clean_field) {
                 $field_query[] = '`'.$this->sql->real_escape_string($index_clean_field).'` = ?';
             }
+            
             return $this->querystmt(
                                     'UPDATE `'.$table.'`
                                     SET
