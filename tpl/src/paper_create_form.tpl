@@ -8,7 +8,10 @@
                 <td><label for="dateUpload">Date Upload:</label></td>
                 <td><input type="text" id="dateUpload" {if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}  /></td>
               </tr-->
-
+              <tr>
+                <td><label for="studentNumber">Student Number:</label></td>
+                <td><input type="text" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if} /></td>
+            </tr>
             <tr>
                 <td><label for="lecturerID">LecturerId:</label></td>
                 <!--td><input type="text" id="lecturerId" {if $details.lecturerId !== null} value="{$details.lecturerId}"{/if} /></td-->
@@ -20,12 +23,6 @@
                             </select>
                           </td>
               </tr>
-
-
-              <tr>
-                <td><label for="studentNumber">Student Number:</label></td>
-                <td><input type="text" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if} /></td>
-			</tr>
             <tr>
 				<td><label for="coordinatorId">CoordinatorId:</label></td>
 				<!--td><input type="text" id="coordinatorId" {if $details.coordinatorId !== null} value="{$details.coordinatorId}"{/if} /></td-->
