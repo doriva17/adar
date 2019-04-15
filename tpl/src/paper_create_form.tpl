@@ -43,8 +43,8 @@
 				<!--td><input type="text" id="clusterId" {if $details.clusterId !== null} value="{$details.clusterId}"{/if} /></td-->
         <td>
           <select id="Cluser ID" name="clusterId">
-                  {foreach from=$cuser item=c}
-                        <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
+                  {foreach from=$clusters item=c}
+                        <option value="{$c.clusterId}" {If $lang == $c.clusterId}selected="selected"{/if}>{$c.clustername}</option>
                     {/foreach}
                     </select>
                   </td>

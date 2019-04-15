@@ -88,6 +88,14 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $allowed[]=strtolower($item['UserID']);
         }
 
+        $clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
+        $clusters = array();
+        $allowed = array();
+        while($item = $clusterslist->fetch_assoc()) {
+            $clusters[]=$item;
+            $allowed[]=strtolower($item['clusterId']);
+        }
+
         $published_status = array("NO","YES");
 
 
@@ -120,6 +128,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
     $GLOBALS['adlerweb']['tpl']->assign('users', $users);
     $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
+    $GLOBALS['adlerweb']['tpl']->assign('clusters', $clusters);
     $GLOBALS['adlerweb']['tpl']->assign('published_status', $published_status);
     $GLOBALS['adlerweb']['tpl']->assign('details', $details);
     $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
