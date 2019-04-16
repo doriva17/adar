@@ -4,7 +4,7 @@ Source Host: localhost
 Source Database: adar
 Target Host: localhost
 Target Database: adar
-Date: 2019/03/25 5:48:57 PM
+Date: 2019/04/16 11:08:04 AM
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -37,7 +37,7 @@ CREATE TABLE `contacts` (
   `URL` varchar(150) NOT NULL,
   `Notes` text NOT NULL,
   PRIMARY KEY (`CID`)
-) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for countries
@@ -86,9 +86,9 @@ CREATE TABLE `papers` (
   `coordinatorId` varchar(255) DEFAULT NULL,
   `clusterId` varchar(255) DEFAULT NULL,
   `publishedStatus` varchar(255) DEFAULT NULL,
-  `abstract` blob,
+  `abstract` mediumtext,
   PRIMARY KEY (`paperId`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for paperstatus
@@ -120,7 +120,7 @@ CREATE TABLE `student` (
   `gender` varchar(255) DEFAULT NULL,
   `course` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`studentID`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
 -- ----------------------------
 -- Table structure for tags
@@ -151,20 +151,23 @@ CREATE TABLE `userloginaccount` (
 -- ----------------------------
 CREATE TABLE `users` (
   `UserID` int(11) NOT NULL AUTO_INCREMENT,
-  `Name` varchar(50) NOT NULL,
-  `Surname` varchar(50) NOT NULL,
-  `Username` varchar(50) NOT NULL COMMENT 'aka loginname',
-  `Password` varchar(72) NOT NULL COMMENT 'salted SHA256',
-  `EMail` varchar(150) NOT NULL,
-  `UIdent` varchar(11) NOT NULL COMMENT 'two chars used as user-identifier for document IDs',
-  `Level` int(11) NOT NULL DEFAULT '0' COMMENT 'binary system, not really documented yet',
+  `Title` varchar(20) DEFAULT NULL,
+  `Name` varchar(50) DEFAULT NULL,
+  `Surname` varchar(50) DEFAULT NULL,
+  `Gender` varchar(20) DEFAULT NULL,
+  `Username` varchar(50) DEFAULT NULL COMMENT 'aka loginname',
+  `Password` varchar(100) DEFAULT NULL COMMENT 'salted SHA256',
+  `EMail` varchar(150) DEFAULT NULL,
+  `ContactNo` varchar(20) DEFAULT NULL,
+  `Image` varchar(255) DEFAULT NULL,
+  `Active` varchar(10) DEFAULT '',
+  `Level` int(11) DEFAULT '0' COMMENT 'binary system, not really documented yet',
   PRIMARY KEY (`UserID`),
   UNIQUE KEY `Name` (`Name`),
-  UNIQUE KEY `EMail` (`EMail`),
-  UNIQUE KEY `UIdent` (`UIdent`),
   UNIQUE KEY `Nickname` (`Username`),
-  UNIQUE KEY `Login` (`Username`,`Password`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
+  UNIQUE KEY `Login` (`Username`,`Password`),
+  UNIQUE KEY `EMail` (`EMail`)
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for usertype
@@ -184,7 +187,7 @@ INSERT INTO `contacts` VALUES ('2', '', '', 'u', '', '', '', '', 'DE', '', '', '
 INSERT INTO `contacts` VALUES ('3', 'Andrew', 'Muteka', 'c', 'home', '', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
 INSERT INTO `contacts` VALUES ('4', 'Andrew', 'Muteka', 'c', 'home', '', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
 INSERT INTO `contacts` VALUES ('5', 'Andrew', 'Muteka', 'c', 'home', '', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
-INSERT INTO `contacts` VALUES ('6', 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
+INSERT INTO `contacts` VALUES ('6', 'test', 'Testing', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
 INSERT INTO `contacts` VALUES ('7', 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
 INSERT INTO `contacts` VALUES ('8', 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
 INSERT INTO `contacts` VALUES ('9', 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test');
@@ -193,6 +196,7 @@ INSERT INTO `contacts` VALUES ('11', 'test', 'test', 'u', 'test', 'test', 'test'
 INSERT INTO `contacts` VALUES ('12', 'Rendy', 'Amputu', 'm', 'home', 'home', 'home', 'home', 'NA', '1111111', '', 'amputur@gmail.com ', '', 'amputur@gmail.com ');
 INSERT INTO `contacts` VALUES ('13', 'Rendy', 'Amputu', 'm', 'home', 'home', 'home', 'home', 'NA', '1111111', '', 'amputur@gmail.com ', '', 'amputur@gmail.com ');
 INSERT INTO `contacts` VALUES ('14', 'Muhepa', 'Mafo', 'm', 'here', '22', '9000', 'home', 'NA', '2546813', '', 'abc@zyx.co', '', 'test');
+INSERT INTO `contacts` VALUES ('15', 'Muhepa', 'Testing', 'm', 'here', '22', '9000', 'home', 'NA', '2546813', '', 'abc@zyx.co', '', 'test');
 INSERT INTO `countries` VALUES ('AF', 'AFGHANISTAN');
 INSERT INTO `countries` VALUES ('AX', 'ÅLAND ISLANDS');
 INSERT INTO `countries` VALUES ('AL', 'ALBANIA');
@@ -447,16 +451,31 @@ INSERT INTO `items` VALUES ('AD_0002', 'PDF test', 'PDF test', 'pdf file', '2019
 INSERT INTO `items` VALUES ('AD_0003', 'project plan', 'project plan', 'project plan', '2019-03-09', '12', '6', '1', '2019-03-09', '1fb7c63c18a2ee28320510cce7e83908fef19f70a1501e5ce1d8834cdc2599ba', '1');
 INSERT INTO `items` VALUES ('AD_0004', 'Sonic', 'Sonic and Tails', 'project plan', '2019-03-10', '1', '6', '1', '2019-03-10', '5df5107d71b5eeab44a3bb87daa7c4a54f7f3b6f64209492d2fde2039554df37', '1');
 INSERT INTO `items` VALUES ('AD_0005', 'character_wallpaper_tails - Copy.png', '', 'something else', '2019-03-11', '12', '12', '1', '2019-03-11', 'c6fe184d653276954aced1d3f1545ab8c1f6cdc0a99c109acc5ab77d74552b49', '1');
-INSERT INTO `roles` VALUES ('1', 'admin');
+INSERT INTO `papers` VALUES ('1', '2019-03-31', '2019-03-31', '1', '2', '200608444', '3', '4', 'NO', 'testing 1 2 3');
+INSERT INTO `papers` VALUES ('2', '2019-03-31', '2019-03-31', '1', '2', '2140578', '3', '4', 'NO', 'testing 1 2 3');
+INSERT INTO `papers` VALUES ('3', '2019-03-31', '2019-03-31', '1', '2', '2160578', '3', '4', 'NO', 'testing 1 2 3');
+INSERT INTO `papers` VALUES ('4', '2019-03-16', '2019-03-22', '1', '2', '2140511', '3', '4', 'NO', 'testing 1 2 3');
+INSERT INTO `roles` VALUES ('1', 'administrator');
 INSERT INTO `roles` VALUES ('2', 'moderator');
 INSERT INTO `roles` VALUES ('3', 'supervisor');
 INSERT INTO `roles` VALUES ('4', 'coordinator');
 INSERT INTO `roles` VALUES ('5', 'student');
 INSERT INTO `student` VALUES ('1', '200608444', 'Andrew', 'Muteka', 'male', 'Software Development');
+INSERT INTO `student` VALUES ('2', '21100458', 'Amputu', 'Rendy', 'male', '08BHIS');
 INSERT INTO `tags` VALUES ('1', 'AD_0001', 'children');
 INSERT INTO `tags` VALUES ('2', 'AD_0001', 'book');
-INSERT INTO `users` VALUES ('1', 'admin', 'admin', 'admin', '3469b67ebf2b71177c3fdb9da2c3fb0e0dec73a9e9a7e3e3516f6ba4813e52dc3f283c57', 'doriva17@gmail.com', 'AD', '1');
-INSERT INTO `users` VALUES ('11', 'Mike', 'Mike', 'mike', '2e7c142bbf94a9986206222a269ff3c7a660fdb7fd3ab7a0d5258339a1b9c0bc80a5970c', 'mike@abc.com', 'mi', '2');
-INSERT INTO `users` VALUES ('10', 'Andrew', 'Andrew', 'Andrew', '05cbb39769ed982e1f7c54d7f6c15fcc7a5e24d1026c796e72cec018d465d0e8c6dbc652', 'Andrew@abc.com', 'kk', '1');
-INSERT INTO `users` VALUES ('9', 'aj', 'aj', 'aj', '1a661b7d4e0c89eb66bc17e05a75b5d46522d7d8f6543a41f4f6f4995689b094b594da69', 'aj', 'aj', '255');
-INSERT INTO `users` VALUES ('12', 'Peter', 'Peter', 'Peter', '1ff93a32e9e764f4a2a00ae9b0d954e2d227d7f30ec8a16f489319fe5fd89acf7f8aca53', 'Peter', 'pe', '5');
+INSERT INTO `users` VALUES ('1', '', 'admin', 'Alfred', null, 'admin', '3469b67ebf2b71177c3fdb9da2c3fb0e0dec73a9e9a7e3e3516f6ba4813e52dc3f283c57', 'doriva17@gmail.com', null, null, 'Yes', '1');
+INSERT INTO `users` VALUES ('11', '', 'Mike', 'Mike', null, 'mike', '2e7c142bbf94a9986206222a269ff3c7a660fdb7fd3ab7a0d5258339a1b9c0bc80a5970c', 'mike@abc.com', null, null, 'Yes', '2');
+INSERT INTO `users` VALUES ('10', '', 'Andrew', 'Andrew', null, 'Andrew', '05cbb39769ed982e1f7c54d7f6c15fcc7a5e24d1026c796e72cec018d465d0e8c6dbc652', 'Andrew@abc.com', null, null, 'Yes', '1');
+INSERT INTO `users` VALUES ('9', '', 'aj', 'Schmidt', null, 'aj', '1a661b7d4e0c89eb66bc17e05a75b5d46522d7d8f6543a41f4f6f4995689b094b594da69', 'aj', null, null, 'Yes', '255');
+INSERT INTO `users` VALUES ('12', '', 'Peter', 'Peter', null, 'Peter', '1ff93a32e9e764f4a2a00ae9b0d954e2d227d7f30ec8a16f489319fe5fd89acf7f8aca53', 'Peter', null, null, 'Yes', '5');
+INSERT INTO `users` VALUES ('13', '', 'Amputu', 'Rendy', null, 'Rendy', '58118992ad95b683d36ca511fceadf5e7f756154167ac388df9d3840bf1c64483eb425e0', 'amputur@gmail.com', null, null, 'Yes', '1');
+INSERT INTO `users` VALUES ('14', '', 'Noah', 'Noah', null, 'Noah', '6e2f4e4ffbbc2629deeb84de23aa681facaeee6e955936cab467073db36543aaf273471e', 'Noah', null, null, 'Yes', '3');
+INSERT INTO `users` VALUES ('15', '', 'Nehale', 'Muteka', null, 'Nehale', '41844e3f033b2511a912e4f3a01345e7305e375f49c9d348995f37964fbcf8ed52e3d54d', 'Nehale', null, null, 'Yes', '1');
+INSERT INTO `users` VALUES ('16', '', 'Lolo', 'Lolo', null, 'Lolo', '098fcb2596a0caae713417e2b46f887f4b2e1ce998cc44185741cc522060311ba0570b53', 'Lolo', null, null, 'Yes', '2');
+INSERT INTO `users` VALUES ('17', 'Mr.', null, null, null, null, null, null, null, null, '', '0');
+INSERT INTO `users` VALUES ('18', 'Ms.', null, null, null, null, null, null, null, null, '', '0');
+INSERT INTO `users` VALUES ('19', 'Mr.', 'Pombili', 'Pombili', null, 'Pombili', 'Pombili', 'Pombili@abc.com', '222222', 'header.png', 'Yes', '1');
+INSERT INTO `users` VALUES ('20', 'Prof.', 'Frans', 'Frans', 'male', 'Frans', '3f206fd5c8fd50b5306575a860d7f85474347d06d201ee6d368c90551761132441a51a20', 'Frans@gmail.com', '222222', 'header.png', 'Yes', '1');
+INSERT INTO `users` VALUES ('21', 'Mr.', 'Gatsen', 'Gatsen', 'male', 'Gatsen', '31ec70f67e8ef04becd28177ef8f3ef15841656871fc3fabcdac054febba3f681ca27318', 'Gatsen@abc.com.na', '222222', '', 'Yes', '2');
+INSERT INTO `users` VALUES ('22', 'Mr.', 'Colin', 'Colin', 'male', 'Colin', '37615dc8882384b2b301c27cce0407019221aad811c4d67c0a2c851705997ae1caf70c14', 'Colin@table.com', '1111111', 'header.png', 'Yes', '3');
