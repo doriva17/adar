@@ -9,10 +9,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 }elseif(isset($_REQUEST['a'])
     && $_REQUEST['a'] == 'To capture'
     && isset($_REQUEST['id'])
-    //&& isset($_REQUEST['dateUpload'])
-    //&& isset($_REQUEST['dateModerated'])
     && isset($_REQUEST['lecturerId'])
-    //&& isset($_REQUEST['moderatorId'])
     && isset($_REQUEST['studentNumber'])
     && isset($_REQUEST['coordinatorId'])
     && isset($_REQUEST['clusterId'])
@@ -20,11 +17,9 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['abstract'])
 ) {
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers (dateUpload, lecturerId, studentNumber, clusterId, publishedStatus, coordinatorId, abstract) VALUES (NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 6), array(
-          //$_REQUEST['dateUpload'],
-            //$_REQUEST['dateModerated'],
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers (dateUpload, lecturerId, studentNumber, clusterId, publishedStatus, coordinatorId, abstract) 
+		VALUES (NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 6), array(
             $_REQUEST['lecturerId'],
-            //$_REQUEST['moderatorId'],
             $_REQUEST['studentNumber'],
             $_REQUEST['coordinatorId'],
             $_REQUEST['clusterId'],
@@ -50,13 +45,13 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             str_repeat('s', 6).'i',
             array(
         $_REQUEST['dateUpload'],
-				//$_REQUEST['dateModerated'],
-				$_REQUEST['lecturerId'],
-			//	$_REQUEST['moderatorId'],
-				$_REQUEST['studentNumber'],
-				$_REQUEST['coordinatorId'],
+		//$_REQUEST['dateModerated'],
+		$_REQUEST['lecturerId'],
+	//	$_REQUEST['moderatorId'],
+		$_REQUEST['studentNumber'],
+		$_REQUEST['coordinatorId'],
         $_REQUEST['clusterId'],
-				$_REQUEST['publishedStatus'],
+		$_REQUEST['publishedStatus'],
         $_REQUEST['abstract'],
         $_REQUEST['id']
             )
@@ -73,7 +68,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         infomail("New Paper", print_r($_REQUEST, true));
     }
 }else{
-    $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '255';");
+    $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '3';");
     $users = array();
     $allowed = array();
     while($item = $lmlist->fetch_assoc()) {
@@ -81,23 +76,24 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $allowed[]=strtolower($item['UserID']);
     }
 
-        $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '11';");
-        $cuser = array();
-        $allowed = array();
-        while($item = $clist->fetch_assoc()) {
-            $cuser[]=$item;
-            $allowed[]=strtolower($item['UserID']);
-        }
+	$clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '4';");
+	$cuser = array();
+	$allowed = array();
+	
+	while($item = $clist->fetch_assoc()) {
+		$cuser[]=$item;
+		$allowed[]=strtolower($item['UserID']);
+	}
 
-        $clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
-        $clusters = array();
-        $allowed = array();
-        while($item = $clusterslist->fetch_assoc()) {
-            $clusters[]=$item;
-            $allowed[]=strtolower($item['clusterId']);
-        }
+	$clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
+	$clusters = array();
+	$allowed = array();
+	while($item = $clusterslist->fetch_assoc()) {
+		$clusters[]=$item;
+		$allowed[]=strtolower($item['clusterId']);
+	}
 
-        $published_status = array("NO","YES");
+	$published_status = array("NO","YES");
 
 
     $dummy = array(

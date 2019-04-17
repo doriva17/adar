@@ -3,19 +3,14 @@
     <fieldset>
 
         <legend>Paper Information Recording Form</legend>
-        <table>
-            <!--tr>
-                <td><label for="dateUpload">Date Upload:</label></td>
-                <td><input type="text" id="dateUpload" {if $details.dateUpload !== null} value="{$details.dateUpload}"{/if}  /></td>
-              </tr--->
+        <table style="width:100%">
               <tr>
-                <td><label for="studentNumber">Student Number:</label></td>
-                <td><input type="text" id="studentNumber" {if $details.studentNumber !== null} value="{$details.studentNumber}"{/if} /></td>
+                <td><label for="studentNumber">Student:</label></td>
+                <td><input type="text" id="studentNumber" onfocus="dynReq(this, 's', 'Student', 1);" onkeyup="dynReq(this, 's', 'Student', 1);" onblur="dynReqBlur(this);"  /></td>
 
             </tr>
             <tr>
-                <td><label for="lecturerID">LecturerId:</label></td>
-                <!--td><input type="text" id="lecturerId" {if $details.lecturerId !== null} value="{$details.lecturerId}"{/if} /></td-->
+                <td><label for="lecturerID">Supervisor:</label></td>
                 <td>
                   <select id="Lecturer ID" name="lecturerId">
                           {foreach from=$users item=c}

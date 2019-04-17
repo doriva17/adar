@@ -51,6 +51,21 @@ switch($_GET['m']) {
         }
         echo '</ul>';
         exit();
+		
+    case 'Student':
+	echo ("inside ".$_GET['m']);
+        if(!isset($_GET['t']) || $_GET['t']=='') die('');
+        if(!preg_match('/^[\w\d\s,\-\.|]*$/', $q)) $q='';
+        $detail=$GLOBALS['adlerweb']['sql']->querystmt("SELECT studentID, studentNumber, firstName, surname, course 
+		FROM `student` WHERE studentNumber LIKE ? OR firstName LIKE ? OR surname LIKE ? ORDER BY firstName", 'iss', array('%'.$q.'%', '%'.$q.'%', '%'.$q.'%'));
+        if(!$detail) die();
+        echo '<ul>';
+        foreach($detail as $f) {
+            echo '<li><a href="#" onclick="document.getElementById(\''.htmlentities($_GET['t'], ENT_COMPAT, 'UTF-8').'\').value=\''.htmlentities($f['firstName'], ENT_COMPAT, 'UTF-8').', '.htmlentities($f['surname'], ENT_COMPAT, 'UTF-8').'\';">'.htmlentities($f['firstName'], ENT_COMPAT, 'UTF-8').', '.htmlentities($f['surname'], ENT_COMPAT, 'UTF-8').'</a></li>';
+        }
+        echo '</ul>';
+        exit();
+		
     case 'Tags':
         if(!isset($_GET['term']) || $_GET['term']=='') die('[]');
         $detail=$GLOBALS['adlerweb']['sql']->querystmt("SELECT TagValue FROM `Tags` WHERE TagValue LIKE ? GROUP BY TagValue", 's', $_GET['term'].'%');
