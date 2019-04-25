@@ -1,9 +1,11 @@
 <?PHP
+
     if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to access this page.');
     }else{
+
         if(!isset($_GET['id']) || !preg_match('/^[A-Z]{2}_[0-9]{4}$/', $_GET['id'])) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'No entries');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
@@ -28,22 +30,28 @@
                     WHERE `ItemID` = ?";
             $sqlq.=" LIMIT 1;";
             $detail=$GLOBALS['adlerweb']['sql']->querystmt_single($sqlq, 's', $id);
+            //die(var_dump($detail));
+            $url = $detail["SourceSHA256"];
+            //die($url);
+            //echo (file_exists('data/tmp/'.$url));
             if(!$detail) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
                 $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries in our archive that match your search criteria.');
-            }elseif(!file_exists('data/cache/'.$id.'.png') && !file_exists('data/cache/'.$id.'-0.png')) {
+            }elseif(!file_exists('data/tmp/'.$url)) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Data Error');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
                 $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The record is corrupt');
             }else{
+
                 if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addtag' && $GLOBALS['adlerweb']['session']->session_isloggedin()) {
                     if(!isset($_REQUEST['tag'])) {
                         http_response_code(400);
                         die();
                     }
+
                     if(!$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO `Tags` VALUES ( NULL , ?, ?);", 'ss', array($detail['ItemID'], $_REQUEST['tag']))) {
                         http_response_code(400);
                         die();
@@ -72,6 +80,7 @@
                 }
 
                 if(file_exists('data/cache/'.$id.'.png')) {
+
                     $multi=false;
                 }else{
                     $multi=0;
@@ -97,6 +106,7 @@
                 $GLOBALS['adlerweb']['tpl']->assign('ScanDate', htmlentities(strftime("%d.%m.%Y", strtotime($detail['ScanDate'])), ENT_COMPAT, 'UTF-8'));
                 $GLOBALS['adlerweb']['tpl']->assign('SourceSHA256', chunk_split(htmlentities($detail['SourceSHA256'], ENT_COMPAT, 'UTF-8'), 8, ' '));
                 $GLOBALS['adlerweb']['tpl']->assign('pages', $multi);
+                $GLOBALS['adlerweb']['tpl']->assign('url', $url);
                 $GLOBALS['adlerweb']['tpl']->assign('titel', 'Detailansicht '.htmlentities($id));
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'content_detail');
                 $GLOBALS['adlerweb']['tpl']->assign('REQUEST_URI', $_SERVER["REQUEST_URI"]);

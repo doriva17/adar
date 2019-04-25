@@ -10,9 +10,9 @@
                     <div class="infobox_content">
                         <nobr>
                             {if $pages == 0}
-                                <img src="?m=content_imgwrapper&id={$ItemID}" alt="Preview of archived item" id="img_prev" onclick="lightbox_open()" />
+                                <a href="data/tmp/{$url}" alt="Preview of archived item" id="img_prev">Download PDF File</a>
                             {else}
-                                <img src="?m=content_imgwrapper&id={$ItemID}&amp;page=0" alt="Preview of archived item" id="img_prev" onclick="lightbox_open()" />
+                                  <a href="data/tmp/{$url}" alt="Preview of archived item" id="img_prev">Download PDF File</a>
                                 <!--@TODO further pages-->
                             {/if}
                         </nobr>

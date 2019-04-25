@@ -21,7 +21,7 @@
     </thead-->
 </table>
 
-<a href="?m=paper_create">
+<a href="?m=content_create">
 <input type="submit" name="a" value="Record a Paper" />
 </a>
 
