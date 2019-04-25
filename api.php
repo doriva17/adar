@@ -443,9 +443,7 @@ $json_data = array(
 );
 
 if(isset($requestData['draw'])) $json_data['draw'] = $requestData['draw'];
-}
-
-elseif($requestData['source']=="cluster"){
+}elseif($requestData['source']=="cluster"){
     //student management
     $columns = array(
 // datatable column index  => database column name
@@ -582,6 +580,7 @@ if(isset($requestData['draw'])) $json_data['draw'] = $requestData['draw'];
 }
 
 //=================================================================================================
+
 elseif($requestData['source']=="student"){
 	//student management
 	$columns = array(
