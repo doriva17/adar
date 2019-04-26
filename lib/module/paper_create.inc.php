@@ -241,7 +241,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'A database error has occurred #103.'.$back);
             }else{
 
-                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
+                //$back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
+                $back2='<div class="centered infobox_addtext"><a href="?m=paper_list&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Archive records successfully!');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The archived material was successfully transferred to the database.Can not capture'.$back2);
