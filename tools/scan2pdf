@@ -1,0 +1,135 @@
+#!/bin/bash
+
+#####################################
+# Scanscript for Document Archiving
+#
+# Autor: adlerweb + kreativmonkey
+# Version: 0.5
+#####################################
+
+SCANNER="kvs20xx:libusb:002:118" # Scanner ID
+#SCANNER=`scanimage -L  | cut -d "'" -f 1 | cut -d '`' -f 2`
+RESOLUTION=300
+BRIGHTNESS=118
+SOURCE="ADF Duplex"
+#SOURCE="ADF Front"
+SCANMODE="lineart"
+#SCANMODE="color"
+#SCANMODE="gray"
+KERNE=4 #Number of cores to use
+
+blankpagesize=20k
+
+#Info
+#Scans DIN A4 (310x210mm)
+#Max 99 pages
+#Creates a searchable PDF
+
+#Todo
+# -> Task queue - next scan while OCR is still running
+
+#Notes:
+# -> Unpaper disabled, swallows i-points and table lines if necessary
+
+TMPDIR=/tmp/scan
+#unpaper=/usr/bin/unpaper
+scanimage=/usr/bin/scanimage
+#tiffcp=/usr/bin/tiffcp
+tiff2pdf=/usr/bin/tiff2pdf
+tesseract=/usr/bin/tesseract
+stapler=/usr/bin/stapler
+convert=/usr/bin/convert
+parallel=/usr/bin/parallel
+
+TESSDATA_PREFIX="/usr/share/"
+
+
+#"Debug"-Modus (show all commands)
+set -x
+
+#### CHECK WHETHER ALL PROGRAMS ARE PRESENT ####
+if [ ! -f "$scanimage" ] ;then
+    echo scanimage not found - Package sane \(-frontend\)
+    exit 1
+fi
+
+#if [ ! -f "$tiffcp" ] ;then
+#    echo tiffcp not found
+#    exit 1
+#fi
+
+if [ ! -f "$tiff2pdf" ] ;then
+    echo tiff2pdf not found - package libtiff \(-tools/utils\)
+    exit 1
+fi
+
+if [ ! -f "$tesseract" ] ;then
+    echo tesseract not found - package tesseract
+    exit 1
+fi
+
+if [ ! -f "$stapler" ] ;then
+    echo stapler not found - package stapler
+    exit 1
+fi
+
+if [ ! -f "$convert" ] ;then
+    echo convert not found - package imagemagick
+    exit 1
+fi
+
+if [ ! -f "$parallel" ] ;then
+    echo parallel not found - package parallel
+    exit 1
+fi
+
+#if [ -a $unpaper ] ;then
+#    echo unpaper not found
+#    exit 1
+#fi
+
+#Temp-Dir creat and delete
+mkdir -p ${TMPDIR}
+rm -Rvi ${TMPDIR}/*
+
+#Filename for output
+OUTPUT=./scan-`date +%Y%m%d%H%M%S`.pdf
+
+#Scan starten
+${scanimage} -d "${SCANNER}" --mode ${SCANMODE} --resolution "${RESOLUTION}" --duplex=yes --feeder-mode=continuous --paper-size=A4 --format=tiff -p --brightness "${BRIGHTNESS}" --batch=/tmp/scan/scan-%d.tiff -x 210 -y 310
+
+#Convert PNM to TIFF and compress
+function convert_pnm () {
+	$convert $1 -compress LZW $1.tiff
+	rm $1
+}
+
+for file in ${TMPDIR}/scan*; do
+    	convert_pnm $file
+done
+
+#Find files larger than $ blankpagesize (= without empty pages)
+files=`find ${TMPDIR} -iname "scan*tiff" -size +$blankpagesize | sort`
+
+#Start OCR and create a PDF per page
+parallel -j ${KERNE} \
+$tesseract -l deu {} {.} pdf \
+::: ${files}
+
+#remove unused files
+rm ${TMPDIR}/*.tiff
+
+#Unpaper removes points from iäöü & co :/
+#rename 's/(\d)\0$1' unpaper-rename 's/(\d)\0$1' unpaper-[1-9].pnm.tiff.pdf
+#for i in unpaper-[1-9].pnm.tiff.pdf ;do
+#	echo $i
+#done
+
+for i in `ls ${TMPDIR}/scan-{0..9}.tiff.pdf 2>/dev/null` ;do
+    mv $i ${TMPDIR}/scan-0${i##*-}
+done
+
+pdfs=`find ${TMPDIR} -iname "scan*pdf" | sort`
+
+$stapler cat $pdfs "${OUTPUT}"
+rm -Rv ${TMPDIR}/*.tiff ${TMPDIR}/*.pdf
