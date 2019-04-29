@@ -5,7 +5,7 @@
     <title>{$ADAR_PROGNAME} - {$titel}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <script type="text/javascript" src="lib/liveforms.js"></script>
-    <script type="text/javascript" src="vendor/adlerweb/calender-date-input/calendarDateInput.js"></script>
+    <script type="text/javascript" src="lib/calendarDateInput.js"></script>
     <script type="text/javascript" src="lib/lightbox.js"></script>
     <script type="text/javascript" src="lib/awtools.js"></script>
 
@@ -29,7 +29,4 @@
         <h1>
             {$ADAR_PROGNAME}
         </h1>
-		<h2>
-            {$titel}
-        </h2>
     </div>

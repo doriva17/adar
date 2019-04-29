@@ -4,15 +4,10 @@
 
         <legend>Paper Information</legend>
         <table>
-            <tr><td><label for="paperId">PaperID:</label></td>
-            <!--td>{$ScanUserShort}_<input type="text" id="paperId" value="{$id}" onkeyup="dynReq(this, 'v', 'paperId');" size="4" /></td-->
-            <td><input type="text" name="paperId" id="paperId" value="{$id}" onkeyup="dynReq(this, 'v', 'paperId');" size="6" readonly="readonly"/></td>
-
-            <td></td>
-            </tr>
             <tr>
                 <td><label for="Caption">Title:</label></td>
                 <td>  <textarea name="abstract" id="abstract" {if $details.abstract !== null} value="{$details.abstract}" rows="2"  cols="80"{/if} ></textarea>
+<input type="hidden" name="paperId" id="paperId" value="{$id}" onkeyup="dynReq(this, 'v', 'paperId');" size="6" readonly="readonly"/>
 </td>
                 <td></td>
             </tr>
@@ -33,13 +28,13 @@
             <tr><td><label for="Sender">LecturerId:</label></td><td>
               <select id="Lecturer ID" name="lecturerId">
                       {foreach from=$users item=c}
-                            <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
+                            <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Username}</option>
                         {/foreach}
                         </select></td></tr>
             <tr><td><label for="Receiver">CoordinatorId:</label></td><td>
               <select id="Coordinator ID" name="coordinatorId">
                       {foreach from=$cuser item=c}
-                            <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
+                            <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Username}</option>
                         {/foreach}
                         </select></td></tr>
                         <tr><td><label for="Receiver">ClusterId:</label></td><td>
@@ -51,7 +46,7 @@
             <!--tr><td><label for="ScanUser">Captured by:</label></td><td><input type="text" id="ScanUser" value="{$ScanUser}" readonly="readonly" /></td></tr-->
             <tr><td><label for="studentNumber">student Number:</label></td><td><select id="studentNumber" name="studentNumber">
                     {foreach from=$inuser item=c}
-                          <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Name}</option>
+                          <option value="{$c.UserID}" {If $lang == $c.UserID}selected="selected"{/if}>{$c.Username}</option>
                       {/foreach}
                       </select></td></tr>
 

@@ -41,11 +41,14 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             if(preg_match('/[A-Z][A-Z]+_(\d{4})\./', $_FILES['file']['name'], $match)) {
                 $id=$match[1];
             }else{
-                $id=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT MAX(SUBSTRING(paperId,4,4)) as UI_ID FROM `papers` WHERE `paperId` LIKE ?;", 's', $_SESSION['adlerweb']['session']['short'].'_%');
+
+                $id=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT MAX(paperId) as UI_ID FROM `papers` WHERE `paperId` LIKE ?;", 's', '%%');
+
                 if($id) {
-                    $id=sprintf("%04d", (int)$id['UI_ID']+1);
+                    $id=$id['UI_ID']+1;
+                    //die("id: ".($id));
                 }else{
-                    $id='0000';
+                    $id=1;
                 }
             }
 
@@ -78,7 +81,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                             $abstract.=$key.' = '.$value."\n";
                     }
                 }
-                $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '255';");
+                $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users where Level = '1';");
                 $users = array();
                 $allowed = array();
                 while($item = $lmlist->fetch_assoc()) {
@@ -86,7 +89,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                     $allowed[]=strtolower($item['UserID']);
                 }
 
-                    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '11';");
+                    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users where Level = '255';");
                     $cuser = array();
                     $allowed = array();
                     while($item = $clist->fetch_assoc()) {
@@ -102,7 +105,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                         $allowed[]=strtolower($item['clusterId']);
                     }
                     $name = $_SESSION['adlerweb']['session']['user'];
-                    $loginuser = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users WHERE Name = '$name';");
+                    $loginuser = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users WHERE Username = '$name';");
                     //$GLOBALS['adlerweb']['tpl']->assign('loginuser',  $loginuser);
                     $inuser = array();
                     $allowed = array();
@@ -134,16 +137,18 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
                     if(!isset($details['Country']) || $details['Country'] == '') {
                         $lang = strtoupper(lang_getfrombrowser ($allowed, 'na', null, false));
-                    }else{
+                    }
+                    else{
                         $lang = $details['Country'];
                     }
+                    //die ("id : ".$id);
                 $GLOBALS['adlerweb']['tpl']->assign('hash', $hash);
                 $GLOBALS['adlerweb']['tpl']->assign('id', $id);
                 $GLOBALS['adlerweb']['tpl']->assign('date', $date);
                 $GLOBALS['adlerweb']['tpl']->assign('$abstract', htmlentities($abstract));
               //  $GLOBALS['adlerweb']['tpl']->assign('ScanDate', strftime("%Y-%m-%d", time()));
                 $GLOBALS['adlerweb']['tpl']->assign('ScanUser', $_SESSION['adlerweb']['session']['user']);
-                $GLOBALS['adlerweb']['tpl']->assign('ScanUserShort', $_SESSION['adlerweb']['session']['short']);
+                //$GLOBALS['adlerweb']['tpl']->assign('ScanUserShort', $_SESSION['adlerweb']['session']['short']);
                 //$GLOBALS['adlerweb']['tpl']->assign('Format', gettopformat());
               //  $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 2 von 2');
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
@@ -161,12 +166,14 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         }
 
     }
-}elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'To capture' && isset($_REQUEST['sourceSHA256']) && isset($_REQUEST['paperId'])) {
+}elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'To capture' && isset($_REQUEST['sourceSHA256'])) {
     $source_path = "data/tmp/";
     $source_path .= $_REQUEST['sourceSHA256'];
     $target_path = "data/org/";
     $cache_path = "data/cache/";
-    $itemid = $_SESSION['adlerweb']['session']['short'].'_'.sprintf ("%04d", (int)$_REQUEST['paperId']);
+    $itemid = $_REQUEST['paperId'];
+    //die("id: $itemid");
+
     $target_path .= $itemid;
     $cache_path .= $itemid;
 
@@ -284,7 +291,7 @@ function getcontacts($s, $r) {
 
 function getcontact($name) {
     if(!preg_match("|^(.+), ([^,]*)$|", $name, $match)) return false;
-    $detail=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID FROM `users` WHERE Nickname LIKE ? AND Name LIKE ?", 'ss', array($match[1], $match[2]));
+    $detail=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID FROM `users` WHERE Surname LIKE ? AND Username LIKE ?", 'ss', array($match[1], $match[2]));
     if(!$detail) return false;
     return $detail['UserID'];
 }

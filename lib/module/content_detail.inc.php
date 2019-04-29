@@ -1,57 +1,50 @@
 <?PHP
-
     if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to access this page.');
     }else{
-
-        if(!isset($_GET['id']) || !preg_match('/^[A-Z]{2}_[0-9]{4}$/', $_GET['id'])) {
+        if(!isset($_GET['id'])) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'No entries');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
+            $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
             $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries in our archive that match your search criteria.');
         }else{
             $id=$_GET['id'];
             $sqlq="SELECT
-                    `Items`.*,
+                    `papers`.*,
                     `Users`.*,
-                    `Receiver`.`CID` as 'R_CID',
-                    `Receiver`.`FamilyName` as 'R_FamilyName',
-                    `Receiver`.`GivenName` as 'R_GivenName',
-                    `Sender`.`CID` as 'S_CID',
-                    `Sender`.`FamilyName` as 'S_FamilyName',
-                    `Sender`.`GivenName` as 'S_GivenName'
+                    `papers`.`studentNumber` as 'StudentId',
+                    `papers`.`lecturerId` as 'LecturerId',
+                    `papers`.`dateUpload` as 'DateUpload',
+                    `papers`.`publishedStatus` as 'PublishedStatus',
+                    `papers`.`clusterId` as 'ClusterId',
+                    `papers`.`sourceSHA256` as 'SourceSHA256',
+                    `papers`.`abstract` as 'Abstract'
                 FROM
-                    `Items`
-                    LEFT JOIN `Users` ON `Items`.`ScanUser` = `Users`.`UserID`
-                    LEFT JOIN `Contacts` AS `Sender` ON `Items`.`Sender` = `Sender`.`CID`
-                    LEFT JOIN `Contacts` AS `Receiver` ON `Items`.`Receiver` = `Receiver`.`CID`
-                    WHERE `ItemID` = ?";
+                    `papers`
+                    LEFT JOIN `Users` ON `papers`.`studentNumber` = `Users`.`UserID`
+
+                    WHERE `paperId` = ?";
             $sqlq.=" LIMIT 1;";
             $detail=$GLOBALS['adlerweb']['sql']->querystmt_single($sqlq, 's', $id);
-            //die(var_dump($detail));
-            $url = $detail["SourceSHA256"];
-            //die($url);
-            //echo (file_exists('data/tmp/'.$url));
             if(!$detail) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
+                $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries in our archive that match your search criteria.');
-            }elseif(!file_exists('data/tmp/'.$url)) {
+            }elseif(!file_exists('data/tmp/'.$detail["SourceSHA256"].'')) {
+              echo 'data/tmp/'.$id.'.pdf';
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Data Error');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
+                $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The record is corrupt');
             }else{
-
                 if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addtag' && $GLOBALS['adlerweb']['session']->session_isloggedin()) {
                     if(!isset($_REQUEST['tag'])) {
                         http_response_code(400);
                         die();
                     }
-
                     if(!$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO `Tags` VALUES ( NULL , ?, ?);", 'ss', array($detail['ItemID'], $_REQUEST['tag']))) {
                         http_response_code(400);
                         die();
@@ -71,16 +64,15 @@
                     die();
                 }
 
-                $tags = $GLOBALS['adlerweb']['sql']->querystmt("SELECT TagValue FROM Tags WHERE ItemID = ?;", 's', $detail['ItemID']);
+              /*  $tags = $GLOBALS['adlerweb']['sql']->querystmt("SELECT TagValue FROM Tags WHERE ItemID = ?;", 's', $detail['ItemID']);
                 $tagarr=array();
                 if($tags) {
                     foreach($tags as $tag) {
                         $tagarr[] = $tag['TagValue'];
                     }
-                }
+                }*/
 
                 if(file_exists('data/cache/'.$id.'.png')) {
-
                     $multi=false;
                 }else{
                     $multi=0;
@@ -89,24 +81,17 @@
                     }
                 }
 
-                if(isset($tagarr)) $GLOBALS['adlerweb']['tpl']->assign('Tags', implode(',', $tagarr));
+              //  if(isset($tagarr)) $GLOBALS['adlerweb']['tpl']->assign('Tags', implode(',', $tagarr));
 
-                $GLOBALS['adlerweb']['tpl']->assign('ItemID', htmlentities($detail['ItemID'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('Caption', htmlentities($detail['Caption'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('Description', htmlentities($detail['Description'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('Format', htmlentities($detail['Format'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('Date', ($detail['Date'] !== NULL) ? htmlentities(strftime("%d.%m.%Y", strtotime($detail['Date'])), ENT_COMPAT, 'UTF-8') : '' );
-                $GLOBALS['adlerweb']['tpl']->assign('R_CID', htmlentities($detail['R_CID'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('R_FamilyName', htmlentities($detail['R_FamilyName'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('R_GivenName', htmlentities($detail['R_GivenName'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('S_CID', htmlentities($detail['S_CID'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('S_FamilyName', htmlentities($detail['S_FamilyName'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('S_GivenName', htmlentities($detail['S_GivenName'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('ScanUser', htmlentities($detail['Name'], ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('ScanDate', htmlentities(strftime("%d.%m.%Y", strtotime($detail['ScanDate'])), ENT_COMPAT, 'UTF-8'));
-                $GLOBALS['adlerweb']['tpl']->assign('SourceSHA256', chunk_split(htmlentities($detail['SourceSHA256'], ENT_COMPAT, 'UTF-8'), 8, ' '));
+                $GLOBALS['adlerweb']['tpl']->assign('ItemID', htmlentities($detail['paperId'], ENT_COMPAT, 'UTF-8'));
+                $GLOBALS['adlerweb']['tpl']->assign('StudentId', htmlentities($detail['StudentId'], ENT_COMPAT, 'UTF-8'));
+                $GLOBALS['adlerweb']['tpl']->assign('LecturerId', htmlentities($detail['LecturerId'], ENT_COMPAT, 'UTF-8'));
+                $GLOBALS['adlerweb']['tpl']->assign('Abstract', htmlentities($detail['Abstract'], ENT_COMPAT, 'UTF-8'));
+                $GLOBALS['adlerweb']['tpl']->assign('DateUpload', ($detail['DateUpload'] !== NULL) ? htmlentities(strftime("%d.%m.%Y", strtotime($detail['DateUpload'])), ENT_COMPAT, 'UTF-8') : '' );
+                $GLOBALS['adlerweb']['tpl']->assign('ClusterId', htmlentities($detail['ClusterId'], ENT_COMPAT, 'UTF-8'));
+                $GLOBALS['adlerweb']['tpl']->assign('PublishedStatus', htmlentities($detail['PublishedStatus'], ENT_COMPAT, 'UTF-8'));
+                $GLOBALS['adlerweb']['tpl']->assign('SourceSHA256', htmlentities($detail['SourceSHA256'], ENT_COMPAT, 'UTF-8'));
                 $GLOBALS['adlerweb']['tpl']->assign('pages', $multi);
-                $GLOBALS['adlerweb']['tpl']->assign('url', $url);
                 $GLOBALS['adlerweb']['tpl']->assign('titel', 'Detailansicht '.htmlentities($id));
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'content_detail');
                 $GLOBALS['adlerweb']['tpl']->assign('REQUEST_URI', $_SERVER["REQUEST_URI"]);

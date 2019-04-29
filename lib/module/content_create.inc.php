@@ -3,35 +3,36 @@
 $back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)">&laquo; To main navigation &laquo;</a></div>';
 
 if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
-    $GLOBALS['adlerweb']['tpl']->assign('titel',  'Keine Berechtigung');
+    $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
     $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-    $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Sie haben nicht die n&ouml;tigen Rechte um neue Archivst&uuml;cke zu erfassen.'.$back);
+    $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to record new archive tracks.'.$back);
 }elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'Upload') {
     //File
-    $target_path = "data/tmp/";
+    $target_path = "data/tmp";
 
     if(!isset($_FILES['file']['tmp_name']) || $_FILES['file']['tmp_name'] == '') {
-        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Fehler bei der Erfassung');
+        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Es wurde keine Datei angegeben.'.$back);
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'No file was specified.'.$back);
     }else{
-        $hash=hash('sha256', file_get_contents($_FILES['file']['tmp_name'])).".pdf";
+        $hash=hash('sha256', file_get_contents($_FILES['file']['tmp_name']));
         $target_path .= $hash;
 
     $finfo = new finfo(FILEINFO_MIME);
     $mime = $finfo->file($_FILES['file']['tmp_name']);
         if(
         !@getimagesize($_FILES['file']['tmp_name']) &&
-        strpos($mime, 'application/pdf') === false
+        strpos($mime, 'application/pdf') === false &&
+        strpos($mime, 'image/png') === false &&
+        strpos($mime, 'image/jpeg') === false
     ) {
-            $GLOBALS['adlerweb']['tpl']->assign('titel',  'Fehler bei der Erfassung');
+            $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Die angegebene Datei ist kein Bild oder in einem unbekannten Format. ('.$mime.')'.$back);
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The specified file is not a picture or in an unknown format. ('.$mime.')'.$back);
         }elseif(!@move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during capture.'.$back);
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during capture. Please contact the operator.'.$back);
 
         }else{
 
@@ -49,10 +50,10 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $dupchk=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT ItemID FROM `Items` WHERE `SourceSHA256` = ?;", 's', $hash);
             if($dupchk) {
                 $dupchk=$dupchk['ItemID'];
-                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$dupchk.'">&raquo; Zur Detailseite &raquo;</a></div>';
-                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Fehler bei der Erfassung');
+                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$dupchk.'">&raquo; To the detail page &raquo;</a></div>';
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Dieses Bild existiert bereits im Archiv!'.$back2);
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'This picture already exists in the archive!'.$back2);
             }else{
 
                 $descr='';
@@ -68,7 +69,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $GLOBALS['adlerweb']['tpl']->assign('edate', $date);
 
                 if($exif && isset($exif['EXIF']) && count($exif['EXIF']) > 0) {
-                    $descr.='Daten der Kamera:'."\n";
+                    $descr.='Data of the camera:'."\n";
                     $descr.='================='."\n";
                     foreach($exif["EXIF"] as $key => $value) {
                         if($key != 'MakerNote' && $key != 'ComponentsConfiguration' && $key != 'UserComment')
@@ -84,7 +85,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $GLOBALS['adlerweb']['tpl']->assign('ScanUser', $_SESSION['adlerweb']['session']['user']);
                 $GLOBALS['adlerweb']['tpl']->assign('ScanUserShort', $_SESSION['adlerweb']['session']['short']);
                 $GLOBALS['adlerweb']['tpl']->assign('Format', gettopformat());
-                $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 2 von 2');
+                $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 2 of 2');
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'create_form');
                 $GLOBALS['adlerweb']['tpl']->assign('menue', 'content_create');
             }
@@ -100,22 +101,21 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $cache_path .= $itemid;
 
     if(!file_exists($source_path)) {
-        $GLOBALS['adlerweb']['tpl']->assign('titel',  '
-Can not captureThe source file was not found.');
+        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The source file was not found.'.$back);
     }elseif(file_exists($target_path)){
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Die Zieldatei existiert bereits.'.$back);
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The destination file already exists.'.$back);
     }elseif(file_exists($cache_path)){
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Die Cachedatei existiert bereits.'.$back);
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The cache file already exists.'.$back);
     }elseif(!isset($_REQUEST['Sender']) || !isset($_REQUEST['Receiver']) || !($cids=getcontacts($_REQUEST['Sender'], $_REQUEST['Receiver']))) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Die Kontakte konnten nicht zugeordnet werden.'.$back);
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The contacts could not be assigned.'.$back);
     }else{
 
         $finfo = new finfo(FILEINFO_MIME);
@@ -135,25 +135,17 @@ Can not captureThe source file was not found.');
         || !isset($_REQUEST['Date'])) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Es wurden nicht alle Felder übermittelt.'.$back);
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Not all fields were submitted.'.$back);
         }else{
 
             $format = gettopformat();
-
             if(isset($_REQUEST['FormatTop']) && $_REQUEST['FormatTop'] != '') $format = $_REQUEST['FormatTop'];
             if(isset($_REQUEST['Format']) && $_REQUEST['Format'] != '') $format = $_REQUEST['Format'];
-//Die($format);
-//echo $target_path.'.'.$suffix;
-//echo "<br />".$source_path;
-//echo "<br />".$cache_path;
-  //          rename($source_path, $target_path.'.'.$suffix);
 
-    //        copy($target_path.'.'.$suffix, $cache_path.'.png');
-      //      die();
             if(!$suffix) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Die Quelldatei hat einen unbekannten Typ.'.$back);
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The source file has an unknown type.'.$back);
             }elseif(($GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Items VALUES ( ?, ?, ?, ?, ?, ?, ?, ?, NOW(), ?, ? )", str_repeat('s', 10), array(
                 $itemid,
                 $_REQUEST['Caption'],
@@ -168,36 +160,47 @@ Can not captureThe source file was not found.');
             ))) === false) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Es ist ein Datenbankfehler aufgetreten #103.'.$back);
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
+            }elseif(!rename($source_path, $target_path.'.'.$suffix)) {
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'File could not be moved to the archive.'.$back);
+            }elseif($suffix == 'png' && !copy($target_path.'.'.$suffix, $cache_path.'.png')) {
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'File could not be copied to the cache (PNG).'.$back);
+            }elseif($suffix == 'jpg' && !procimg($target_path.'.'.$suffix, $cache_path.'.png')) {
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'File could not be cached (JPG).'.$back);
+            }elseif($suffix == 'pdf' && !procpdf($target_path.'.'.$suffix, $cache_path.'.png')) {
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'File could not be copied to the cache (PDF).'.$back);
             }else{
-
-                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$itemid.'">&raquo; Zur Detailseite &raquo;</a></div>';
+                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
-                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Archive records successfully!');
-                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The archived material was successfully transferred to the database.Can not capture'.$back2);
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Archive material successfully recorded!');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The archived material was successfully transferred to the database.'.$back2);
                 $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
-                //infomail("New Archive AdAR", $_REQUEST['Caption']);
+                infomail("New Archive AdAR", $_REQUEST['Caption']);
             }
         }
     }
 }else{
-    $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 1 von 2');
+    $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 1 of 2');
     $GLOBALS['adlerweb']['tpl']->assign('modul', 'create_upload');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'content_create');
 }
 
 function procimg($src, $trg) {
-//  die("procimg");
-return true;
     $img = imagecreatefromjpeg($src);
     if(!$img) return false;
     return imagepng($img, $trg, 9);
 }
 
 function procpdf($src, $trg) {
-  return true;
     if(!file_exists($src)) return false;
-    //die("src: $src trg: $trg");
     exec('convert '.escapeshellarg($src).' '.escapeshellarg($trg), $dummy, $return);
     if($return != 0) return false;
     return true;
