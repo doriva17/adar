@@ -517,16 +517,10 @@ for($i=0; $i<count($columns); $i++) {
 if(!empty($requestData['search']['value'])) {
     $sql_filter.="
         AND (
-            `studentID` LIKE ? OR
-            `studentNumber` LIKE ? OR
-            `firstName` LIKE ? OR
-            `surname` LIKE ? OR
-            `gender` LIKE ? OR
-            `course` LIKE ? OR
+            `clusterId` LIKE ? OR
+            `clustername` LIKE ? OR
+            `Description` LIKE ? OR
         ) ";
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
-        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
