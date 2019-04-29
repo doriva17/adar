@@ -17,7 +17,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['abstract'])
 ) {
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers (dateUpload, lecturerId, studentNumber, clusterId, publishedStatus, coordinatorId, abstract) 
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers (dateUpload, lecturerId, studentNumber, coordinatorId, clusterId,publishedStatus,  abstract) 
 		VALUES (NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 6), array(
             $_REQUEST['lecturerId'],
             $_REQUEST['studentNumber'],
