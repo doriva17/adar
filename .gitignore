@@ -7,3 +7,5 @@ config.php
  composer.lock
  composer.json
  composer.phar
+doc/db/adar20190416.sql~566f3f6fb4e2b3177ba6615e77967fbdabc28150
+doc/db/adar.sql~566f3f6fb4e2b3177ba6615e77967fbdabc28150
