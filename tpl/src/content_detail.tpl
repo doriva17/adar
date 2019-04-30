@@ -10,7 +10,9 @@
                     <div class="infobox_content">
                         <nobr>
                             {if $pages == 0}
-                                <img src="?m=content_imgwrapper&id={$ItemID}" alt="Preview of archived item" id="img_prev" onclick="lightbox_open()" />
+                                <a alt="Preview of archived item" id="img_prev" href="data/tmp/{$SourceSHA256}">
+                                  Download PDF File
+                                </a>
                             {else}
                                 <img src="?m=content_imgwrapper&id={$ItemID}&amp;page=0" alt="Preview of archived item" id="img_prev" onclick="lightbox_open()" />
                                 <!--@TODO further pages-->
@@ -55,36 +57,14 @@
                     <div class="infobox_content">
                         <table>
                             <tr><td>ItemID:</td><td>{$ItemID}</td></tr>
-                            <tr><td>Title:</td><td>{$Caption}</td></tr>
-                            <tr><td>Pages:</td><td>{if $pages}{$pages}{else}1{/if}</td></tr>
-                            <tr><td>Format:</td><td>{$Format}</td></tr>
-                            <tr><td>Content Date:</td><td>{$Date}</td></tr>
-                            <tr><td>Intigritätstest:</td><td>{$SourceSHA256}</td></tr>
+                            <tr><td>Student Number:</td><td>{$StudentId}</td></tr>
+                            <tr><td>Lecturer:</td><td>{$LecturerId}</td></tr>
+                            <tr><td>Upload Date:</td><td>{$DateUpload}</td></tr>
                         </table>
-                    </div>
-                </div>
-                <div class="infobox_half">
-                    <div class="infobox_header">
-                        <img src="vendor/koala-framework/library-silkicons/book_open.png" alt="" /> Context
-                    </div>
-                    <div class="infobox_content">
-                        <table>
-                            <tr><td>Sender:</td><td><a href="?m=contact_create&amp;id={$S_CID}">{$S_FamilyName}, {$S_GivenName}</a></td></tr>
-                            <tr><td>Receiver:</td><td><a href="?m=contact_create&amp;id={$R_CID}">{$R_FamilyName}, {$R_GivenName}</a></td></tr>
-                            <tr><td>Captured by:</td><td>{$ScanUser}</td></tr>
-                            <tr><td>Recorded on the:</td><td>{$ScanDate}</td></tr>
-                        </table>
-                    </div>
-                </div>
-                <div class="infobox_full">
-                    <div class="infobox_header">
-                        <img src="vendor/koala-framework/library-silkicons/note.png" alt="" /> Description
-                    </div>
-                    <div class="infobox_content">
-                        <pre>{$Description}</pre>
                     </div>
                 </div>
 
+      
                 <!-- ZOOM -->
                 <div id="lightbox">
                     <div id="lightbox_shadow">

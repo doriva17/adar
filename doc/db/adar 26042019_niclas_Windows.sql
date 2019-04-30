@@ -1,12 +1,11 @@
-
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Apr 01, 2019 at 04:27 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 5.6.40
+-- Host: 127.0.0.1
+-- Generation Time: Apr 26, 2019 at 04:03 PM
+-- Server version: 10.1.38-MariaDB
+-- PHP Version: 7.3.2
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -30,8 +29,8 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `cluster` (
-  `ClusterId` int(11) NOT NULL,
-  `Clustername` varchar(255) DEFAULT NULL,
+  `clusterId` int(11) NOT NULL,
+  `clustername` varchar(255) DEFAULT NULL,
   `Description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -45,10 +44,12 @@ CREATE TABLE `contacts` (
   `CID` int(11) NOT NULL,
   `FamilyName` varchar(164) NOT NULL,
   `GivenName` varchar(224) NOT NULL,
-  `Gender` set('m','f','u','c') NOT NULL COMMENT '(m)ale, (f)emale, (u)ndefined, (c)ompany',
+  `Type` set('m','f','u','c') NOT NULL COMMENT '(m)ale, (f)emale, (u)ndefined, (c)ompany',
   `Street` varchar(164) NOT NULL,
   `Housenr` varchar(16) NOT NULL,
-  `LocationId` int(164) NOT NULL,
+  `ZIP` varchar(16) NOT NULL,
+  `City` varchar(164) NOT NULL,
+  `Country` varchar(2) NOT NULL,
   `Phone` varchar(64) NOT NULL,
   `Fax` varchar(64) NOT NULL,
   `Mail` varchar(164) NOT NULL,
@@ -60,21 +61,22 @@ CREATE TABLE `contacts` (
 -- Dumping data for table `contacts`
 --
 
-INSERT INTO `contacts` (`CID`, `FamilyName`, `GivenName`, `Gender`, `Street`, `Housenr`, `LocationId`, `Phone`, `Fax`, `Mail`, `URL`, `Notes`) VALUES
-(1, 'Andrew', 'Muteka', 'm', 'home', 'home', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(2, '', '', 'u', '', '', 0, '', '', '', '', ''),
-(3, 'Andrew', 'Muteka', 'c', 'home', '', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(4, 'Andrew', 'Muteka', 'c', 'home', '', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(5, 'Andrew', 'Muteka', 'c', 'home', '', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(6, 'test', 'test', 'u', 'test', 'test', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(7, 'test', 'test', 'u', 'test', 'test', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(8, 'test', 'test', 'u', 'test', 'test', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(9, 'test', 'test', 'u', 'test', 'test', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(10, 'test', 'test', 'u', 'test', 'test', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(11, 'test', 'test', 'u', 'test', 'test', 0, '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
-(12, 'Rendy', 'Amputu', 'm', 'home', 'home', 0, '1111111', '', 'amputur@gmail.com ', '', 'amputur@gmail.com '),
-(13, 'Rendy', 'Amputu', 'm', 'home', 'home', 0, '1111111', '', 'amputur@gmail.com ', '', 'amputur@gmail.com '),
-(14, 'Muhepa', 'Mafo', 'm', 'here', '22', 0, '2546813', '', 'abc@zyx.co', '', 'test');
+INSERT INTO `contacts` (`CID`, `FamilyName`, `GivenName`, `Type`, `Street`, `Housenr`, `ZIP`, `City`, `Country`, `Phone`, `Fax`, `Mail`, `URL`, `Notes`) VALUES
+(1, 'Andrew', 'Muteka', 'm', 'home', 'home', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(2, '', '', 'u', '', '', '', '', 'DE', '', '', '', '', ''),
+(3, 'Andrew', 'Muteka', 'c', 'home', '', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(4, 'Andrew', 'Muteka', 'c', 'home', '', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(5, 'Andrew', 'Muteka', 'c', 'home', '', 'home', 'home', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(6, 'test', 'Testing', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(7, 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(8, 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(9, 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(10, 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(11, 'test', 'test', 'u', 'test', 'test', 'test', 'test', 'NA', '1111111', '111111', 'doriva17@gmail.com', 'www.gmail.com', 'test'),
+(12, 'Rendy', 'Amputu', 'm', 'home', 'home', 'home', 'home', 'NA', '1111111', '', 'amputur@gmail.com ', '', 'amputur@gmail.com '),
+(13, 'Rendy', 'Amputu', 'm', 'home', 'home', 'home', 'home', 'NA', '1111111', '', 'amputur@gmail.com ', '', 'amputur@gmail.com '),
+(14, 'Muhepa', 'Mafo', 'm', 'here', '22', '9000', 'home', 'NA', '2546813', '', 'abc@zyx.co', '', 'test'),
+(15, 'Muhepa', 'Testing', 'm', 'here', '22', '9000', 'home', 'NA', '2546813', '', 'abc@zyx.co', '', 'test');
 
 -- --------------------------------------------------------
 
@@ -83,7 +85,7 @@ INSERT INTO `contacts` (`CID`, `FamilyName`, `GivenName`, `Gender`, `Street`, `H
 --
 
 CREATE TABLE `countries` (
-  `CountryCode` varchar(255) NOT NULL,
+  `Alpha2` varchar(2) NOT NULL,
   `Name` varchar(128) NOT NULL
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COMMENT='Source: http://www.iso.org/iso/country_codes/iso_3166_code_l';
 
@@ -91,7 +93,7 @@ CREATE TABLE `countries` (
 -- Dumping data for table `countries`
 --
 
-INSERT INTO `countries` (`CountryCode`, `Name`) VALUES
+INSERT INTO `countries` (`Alpha2`, `Name`) VALUES
 ('AF', 'AFGHANISTAN'),
 ('AX', 'ÅLAND ISLANDS'),
 ('AL', 'ALBANIA'),
@@ -345,18 +347,6 @@ INSERT INTO `countries` (`CountryCode`, `Name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `course`
---
-
-CREATE TABLE `course` (
-  `CourseId` int(11) NOT NULL,
-  `CourseDescription` varchar(255) NOT NULL,
-  `CourseName` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `items`
 --
 
@@ -388,46 +378,31 @@ INSERT INTO `items` (`ItemID`, `Caption`, `Description`, `Format`, `Date`, `Send
 -- --------------------------------------------------------
 
 --
--- Table structure for table `lecturer`
---
-
-CREATE TABLE `lecturer` (
-  `LecturerId` int(11) NOT NULL,
-  `UserId` int(11) NOT NULL,
-  `UserTypeId` int(11) NOT NULL,
-  `CourseId` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `location`
---
-
-CREATE TABLE `location` (
-  `LocationId` int(10) NOT NULL,
-  `CountryCode` varchar(255) NOT NULL,
-  `Town` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `papers`
 --
 
 CREATE TABLE `papers` (
-  `PaperId` int(11) NOT NULL,
-  `DateUpload` date DEFAULT NULL,
-  `DateModerated` date DEFAULT NULL,
-  `LecturerId` varchar(255) DEFAULT NULL,
-  `ModeratorId` varchar(255) DEFAULT NULL,
-  `StudentNumber` varchar(255) DEFAULT NULL,
-  `CoordinatorId` varchar(255) DEFAULT NULL,
-  `ClusterId` varchar(255) DEFAULT NULL,
-  `PaperStatusID` int(255) DEFAULT NULL,
-  `Abstract` blob
+  `paperId` int(11) NOT NULL,
+  `dateUpload` date DEFAULT NULL,
+  `dateModerated` date DEFAULT NULL,
+  `lecturerId` varchar(255) DEFAULT NULL,
+  `moderatorId` varchar(255) DEFAULT NULL,
+  `studentNumber` varchar(255) DEFAULT NULL,
+  `coordinatorId` varchar(255) DEFAULT NULL,
+  `clusterId` varchar(255) DEFAULT NULL,
+  `publishedStatus` varchar(255) DEFAULT NULL,
+  `abstract` mediumtext
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `papers`
+--
+
+INSERT INTO `papers` (`paperId`, `dateUpload`, `dateModerated`, `lecturerId`, `moderatorId`, `studentNumber`, `coordinatorId`, `clusterId`, `publishedStatus`, `abstract`) VALUES
+(1, '2019-03-31', '2019-03-31', '1', '2', '200608444', '3', '4', 'NO', 'testing 1 2 3'),
+(2, '2019-03-31', '2019-03-31', '1', '2', '2140578', '3', '4', 'NO', 'testing 1 2 3'),
+(3, '2019-03-31', '2019-03-31', '1', '2', '2160578', '3', '4', 'NO', 'testing 1 2 3'),
+(4, '2019-03-16', '2019-03-22', '1', '2', '2140511', '3', '4', 'NO', 'testing 1 2 3');
 
 -- --------------------------------------------------------
 
@@ -436,9 +411,9 @@ CREATE TABLE `papers` (
 --
 
 CREATE TABLE `paperstatus` (
-  `PaperStatusID` int(11) NOT NULL,
-  `StatusName` varchar(255) DEFAULT NULL COMMENT 'who can view which paper',
-  `Description` varchar(255) DEFAULT NULL
+  `statusID` int(11) NOT NULL,
+  `statusName` varchar(255) DEFAULT NULL COMMENT 'who can view which paper',
+  `description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -448,16 +423,16 @@ CREATE TABLE `paperstatus` (
 --
 
 CREATE TABLE `roles` (
-  `RoleID` int(11) NOT NULL,
-  `RoleName` varchar(255) DEFAULT NULL
+  `roleID` int(11) NOT NULL,
+  `roleName` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `roles`
 --
 
-INSERT INTO `roles` (`RoleID`, `RoleName`) VALUES
-(1, 'admin'),
+INSERT INTO `roles` (`roleID`, `roleName`) VALUES
+(1, 'administrator'),
 (2, 'moderator'),
 (3, 'supervisor'),
 (4, 'coordinator'),
@@ -470,19 +445,21 @@ INSERT INTO `roles` (`RoleID`, `RoleName`) VALUES
 --
 
 CREATE TABLE `student` (
-  `StudentNumber` int(11) NOT NULL,
-  `FirstName` varchar(255) DEFAULT NULL,
-  `Surname` varchar(255) DEFAULT NULL,
-  `Gender` varchar(255) DEFAULT NULL,
-  `courseTypeId` varchar(255) DEFAULT NULL
+  `studentID` int(11) NOT NULL,
+  `studentNumber` int(11) DEFAULT NULL,
+  `firstName` varchar(255) DEFAULT NULL,
+  `surname` varchar(255) DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `course` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`StudentNumber`, `FirstName`, `Surname`, `Gender`, `courseTypeId`) VALUES
-(200608444, 'Andrew', 'Muteka', 'male', 'Software Development');
+INSERT INTO `student` (`studentID`, `studentNumber`, `firstName`, `surname`, `gender`, `course`) VALUES
+(1, 200608444, 'Andrew', 'Muteka', 'male', 'Software Development'),
+(2, 21100458, 'Amputu', 'Rendy', 'male', '08BHIS');
 
 -- --------------------------------------------------------
 
@@ -511,9 +488,9 @@ INSERT INTO `tags` (`TagID`, `ItemID`, `TagValue`) VALUES
 --
 
 CREATE TABLE `userloginaccount` (
-  `UserLoginId` int(11) NOT NULL,
+  `UserId` int(11) NOT NULL,
   `Username` varchar(255) DEFAULT NULL,
-  `Password` varchar(72) CHARACTER SET utf8 NOT NULL COMMENT 'salted SHA256'
+  `Password` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -524,26 +501,40 @@ CREATE TABLE `userloginaccount` (
 
 CREATE TABLE `users` (
   `UserID` int(11) NOT NULL,
-  `Name` varchar(150) NOT NULL,
-  `LastName` varchar(50) NOT NULL COMMENT 'aka loginname',
-  `EMail` varchar(150) NOT NULL,
-  `UserTypeId` varchar(11) NOT NULL DEFAULT '0' COMMENT 'binary system, not really documented yet',
-  `UserLoginId` varchar(11) NOT NULL COMMENT 'two chars used as user-identifier for document IDs'
+  `Title` varchar(20) DEFAULT NULL,
+  `Name` varchar(50) DEFAULT NULL,
+  `Surname` varchar(50) DEFAULT NULL,
+  `Gender` varchar(20) DEFAULT NULL,
+  `Username` varchar(50) DEFAULT NULL COMMENT 'aka loginname',
+  `Password` varchar(100) DEFAULT NULL COMMENT 'salted SHA256',
+  `EMail` varchar(150) DEFAULT NULL,
+  `ContactNo` varchar(20) DEFAULT NULL,
+  `Image` varchar(255) DEFAULT NULL,
+  `Active` varchar(10) DEFAULT '',
+  `Level` int(11) DEFAULT '0' COMMENT 'binary system, not really documented yet'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`UserID`, `Name`, `LastName`, `EMail`, `UserTypeId`, `UserLoginId`) VALUES
-(1, 'admin', 'admin', 'doriva17@gmail.com', '255', 'AD'),
-(2, 'Andrew', 'andrew', 'andrew@tumbare.com', '255', 'AN'),
-(4, 'test1', 'test1', 'tewset1', '11', 'q'),
-(5, 'test2', 'test2', 'test2', '11', 'qq'),
-(6, 'Nic', 'Nic', 'Nic', '11', 'Nic'),
-(7, 'John', 'Jon', 'ewrwer', '11', 'jo'),
-(8, 'fdsafdsa', 'fsafsd', 'fasfd', 'fsafds', 'asdfdsads'),
-(10, 'Joseph Muhepa', 'Mafo', 'mafo@nust.com', 'level 1', '1');
+INSERT INTO `users` (`UserID`, `Title`, `Name`, `Surname`, `Gender`, `Username`, `Password`, `EMail`, `ContactNo`, `Image`, `Active`, `Level`) VALUES
+(1, '', 'admin', 'Alfred', NULL, 'admin', '3469b67ebf2b71177c3fdb9da2c3fb0e0dec73a9e9a7e3e3516f6ba4813e52dc3f283c57', 'doriva17@gmail.com', NULL, NULL, 'Yes', 1),
+(11, '', 'Mike', 'Mike', NULL, 'mike', '2e7c142bbf94a9986206222a269ff3c7a660fdb7fd3ab7a0d5258339a1b9c0bc80a5970c', 'mike@abc.com', NULL, NULL, 'Yes', 2),
+(10, '', 'Andrew', 'Andrew', NULL, 'Andrew', '05cbb39769ed982e1f7c54d7f6c15fcc7a5e24d1026c796e72cec018d465d0e8c6dbc652', 'Andrew@abc.com', NULL, NULL, 'Yes', 1),
+(9, '', 'aj', 'Schmidt', NULL, 'aj', '1a661b7d4e0c89eb66bc17e05a75b5d46522d7d8f6543a41f4f6f4995689b094b594da69', 'aj', NULL, NULL, 'Yes', 255),
+(12, '', 'Peter', 'Peter', NULL, 'Peter', '1ff93a32e9e764f4a2a00ae9b0d954e2d227d7f30ec8a16f489319fe5fd89acf7f8aca53', 'Peter', NULL, NULL, 'Yes', 5),
+(13, '', 'Amputu', 'Rendy', NULL, 'Rendy', '58118992ad95b683d36ca511fceadf5e7f756154167ac388df9d3840bf1c64483eb425e0', 'amputur@gmail.com', NULL, NULL, 'Yes', 1),
+(14, '', 'Noah', 'Noah', NULL, 'Noah', '6e2f4e4ffbbc2629deeb84de23aa681facaeee6e955936cab467073db36543aaf273471e', 'Noah', NULL, NULL, 'Yes', 3),
+(15, '', 'Nehale', 'Muteka', NULL, 'Nehale', '41844e3f033b2511a912e4f3a01345e7305e375f49c9d348995f37964fbcf8ed52e3d54d', 'Nehale', NULL, NULL, 'Yes', 1),
+(16, '', 'Lolo', 'Lolo', NULL, 'Lolo', '098fcb2596a0caae713417e2b46f887f4b2e1ce998cc44185741cc522060311ba0570b53', 'Lolo', NULL, NULL, 'Yes', 2),
+(17, 'Mr.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 0),
+(18, 'Ms.', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '', 0),
+(19, 'Mr.', 'Pombili', 'Pombili', NULL, 'Pombili', 'Pombili', 'Pombili@abc.com', '222222', 'header.png', 'Yes', 1),
+(20, 'Prof.', 'Frans', 'Frans', 'male', 'Frans', '3f206fd5c8fd50b5306575a860d7f85474347d06d201ee6d368c90551761132441a51a20', 'Frans@gmail.com', '222222', 'header.png', 'Yes', 1),
+(21, 'Mr.', 'Gatsen', 'Gatsen', 'male', 'Gatsen', '31ec70f67e8ef04becd28177ef8f3ef15841656871fc3fabcdac054febba3f681ca27318', 'Gatsen@abc.com.na', '222222', '', 'Yes', 2),
+(22, 'Mr.', 'Colin', 'Colin', 'male', 'Colin', '37615dc8882384b2b301c27cce0407019221aad811c4d67c0a2c851705997ae1caf70c14', 'Colin@table.com', '1111111', 'header.png', 'Yes', 3),
+(23, 'Mr.', 'Niclas', 'Shilongo', 'male', 'nshilongo', '09754dffd74685c60a16ea6bc253372aca9b359a0bf184f5141a665896247eb72c8b8ddc', 'nshilongo78@gmail.com', '0811', '', 'Yes', 5);
 
 -- --------------------------------------------------------
 
@@ -552,9 +543,9 @@ INSERT INTO `users` (`UserID`, `Name`, `LastName`, `EMail`, `UserTypeId`, `UserL
 --
 
 CREATE TABLE `usertype` (
-  `UserTypeId` int(11) NOT NULL,
-  `TypeName` varchar(255) DEFAULT NULL,
-  `UserDescription` varchar(255) DEFAULT NULL
+  `userTypeId` int(11) NOT NULL,
+  `typeName` varchar(255) DEFAULT NULL,
+  `Description` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
@@ -565,27 +556,20 @@ CREATE TABLE `usertype` (
 -- Indexes for table `cluster`
 --
 ALTER TABLE `cluster`
-  ADD PRIMARY KEY (`ClusterId`);
+  ADD PRIMARY KEY (`clusterId`);
 
 --
 -- Indexes for table `contacts`
 --
 ALTER TABLE `contacts`
-  ADD PRIMARY KEY (`CID`),
-  ADD KEY `fk_location` (`LocationId`);
+  ADD PRIMARY KEY (`CID`);
 
 --
 -- Indexes for table `countries`
 --
 ALTER TABLE `countries`
-  ADD PRIMARY KEY (`CountryCode`),
+  ADD PRIMARY KEY (`Alpha2`),
   ADD UNIQUE KEY `Name` (`Name`);
-
---
--- Indexes for table `course`
---
-ALTER TABLE `course`
-  ADD PRIMARY KEY (`CourseId`,`CourseDescription`);
 
 --
 -- Indexes for table `items`
@@ -600,42 +584,28 @@ ALTER TABLE `items`
 ALTER TABLE `items` ADD FULLTEXT KEY `Description` (`Description`);
 
 --
--- Indexes for table `lecturer`
---
-ALTER TABLE `lecturer`
-  ADD PRIMARY KEY (`LecturerId`),
-  ADD UNIQUE KEY `LecturerId` (`LecturerId`);
-
---
--- Indexes for table `location`
---
-ALTER TABLE `location`
-  ADD PRIMARY KEY (`LocationId`);
-
---
 -- Indexes for table `papers`
 --
 ALTER TABLE `papers`
-  ADD PRIMARY KEY (`PaperId`);
+  ADD PRIMARY KEY (`paperId`);
 
 --
 -- Indexes for table `paperstatus`
 --
 ALTER TABLE `paperstatus`
-  ADD PRIMARY KEY (`PaperStatusID`);
+  ADD PRIMARY KEY (`statusID`);
 
 --
 -- Indexes for table `roles`
 --
 ALTER TABLE `roles`
-  ADD PRIMARY KEY (`RoleID`);
+  ADD PRIMARY KEY (`roleID`);
 
 --
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
-  ADD PRIMARY KEY (`StudentNumber`),
-  ADD UNIQUE KEY `studentNumber` (`StudentNumber`);
+  ADD PRIMARY KEY (`studentID`);
 
 --
 -- Indexes for table `tags`
@@ -651,7 +621,7 @@ ALTER TABLE `tags`
 -- Indexes for table `userloginaccount`
 --
 ALTER TABLE `userloginaccount`
-  ADD PRIMARY KEY (`UserLoginId`);
+  ADD PRIMARY KEY (`UserId`);
 
 --
 -- Indexes for table `users`
@@ -659,17 +629,15 @@ ALTER TABLE `userloginaccount`
 ALTER TABLE `users`
   ADD PRIMARY KEY (`UserID`),
   ADD UNIQUE KEY `Name` (`Name`),
-  ADD UNIQUE KEY `EMail` (`EMail`),
-  ADD UNIQUE KEY `UIdent` (`UserLoginId`),
-  ADD UNIQUE KEY `Nickname` (`LastName`),
-  ADD UNIQUE KEY `Login` (`LastName`),
-  ADD KEY `fk_userType` (`UserTypeId`);
+  ADD UNIQUE KEY `Nickname` (`Username`),
+  ADD UNIQUE KEY `Login` (`Username`,`Password`),
+  ADD UNIQUE KEY `EMail` (`EMail`);
 
 --
 -- Indexes for table `usertype`
 --
 ALTER TABLE `usertype`
-  ADD PRIMARY KEY (`UserTypeId`);
+  ADD PRIMARY KEY (`userTypeId`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -679,31 +647,37 @@ ALTER TABLE `usertype`
 -- AUTO_INCREMENT for table `cluster`
 --
 ALTER TABLE `cluster`
-  MODIFY `ClusterId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `clusterId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `contacts`
 --
 ALTER TABLE `contacts`
-  MODIFY `CID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `CID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `papers`
 --
 ALTER TABLE `papers`
-  MODIFY `PaperId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `paperId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `paperstatus`
 --
 ALTER TABLE `paperstatus`
-  MODIFY `PaperStatusID` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `statusID` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `roles`
 --
 ALTER TABLE `roles`
-  MODIFY `RoleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `roleID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `student`
+--
+ALTER TABLE `student`
+  MODIFY `studentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `tags`
@@ -715,19 +689,19 @@ ALTER TABLE `tags`
 -- AUTO_INCREMENT for table `userloginaccount`
 --
 ALTER TABLE `userloginaccount`
-  MODIFY `UserLoginId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `UserId` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `UserID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `usertype`
 --
 ALTER TABLE `usertype`
-  MODIFY `UserTypeId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `userTypeId` int(11) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

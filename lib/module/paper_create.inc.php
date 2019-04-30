@@ -1,133 +1,305 @@
 <?PHP
 
-$back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)">&laquo; For navigation use &laquo;</a></div>';
+$back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)">&laquo; To main navigation &laquo;</a></div>';
 
 if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
     $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-    $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to upload new papers.'.$back);
-}elseif(isset($_REQUEST['a'])
-    && $_REQUEST['a'] == 'To capture'
-    && isset($_REQUEST['id'])
-    && isset($_REQUEST['lecturerId'])
-    && isset($_REQUEST['studentNumber'])
-    && isset($_REQUEST['coordinatorId'])
-    && isset($_REQUEST['clusterId'])
-    && isset($_REQUEST['publishedStatus'])
-    && isset($_REQUEST['abstract'])
-) {
-    if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers (dateUpload, lecturerId, studentNumber, coordinatorId, clusterId,publishedStatus,  abstract) 
-		VALUES (NOW(), ?, ?, ?, ?, ?, ? )", str_repeat('s', 6), array(
-            $_REQUEST['lecturerId'],
-            $_REQUEST['studentNumber'],
-            $_REQUEST['coordinatorId'],
-            $_REQUEST['clusterId'],
-            $_REQUEST['publishedStatus'],
-            $_REQUEST['abstract'],
-        ))
-    )
-	{
+    $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to record new archive tracks.'.$back);
+
+}elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'Upload') {
+    //File
+
+    $target_path = "data/tmp/";
+
+    if(!isset($_FILES['file']['tmp_name']) || $_FILES['file']['tmp_name'] == '') {
+        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
+        $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'No file was specified.'.$back);
+    }else{
+
+        $hash=hash('sha256', file_get_contents($_FILES['file']['tmp_name'])).".pdf";
+        $target_path .= $hash;
+
+    $finfo = new finfo(FILEINFO_MIME);
+    $mime = $finfo->file($_FILES['file']['tmp_name']);
+        if(
+        !@getimagesize($_FILES['file']['tmp_name']) &&
+        strpos($mime, 'application/pdf') === false
+    ) {
+            $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
+            $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The specified file is not a picture or in an unknown format. ('.$mime.')'.$back);
+        }elseif(!@move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
+            $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
+            $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during capture.'.$back);
+
+        }else{
+
+            if(preg_match('/[A-Z][A-Z]+_(\d{4})\./', $_FILES['file']['name'], $match)) {
+                $id=$match[1];
+            }else{
+
+                $id=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT MAX(paperId) as UI_ID FROM `papers` WHERE `paperId` LIKE ?;", 's', '%%');
+
+                if($id) {
+                    $id=$id['UI_ID']+1;
+                    //die("id: ".($id));
+                }else{
+                    $id=1;
+                }
+            }
+
+            $dupchk=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT paperId FROM `papers` WHERE `sourceSHA256` = ?;", 's', $hash);
+            if($dupchk) {
+                $dupchk=$dupchk['paperId'];
+                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$dupchk.'">&raquo; To the detail page &raquo;</a></div>';
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'This document already exists in the system!'.$back2);
+            }else{
+
+                $abstract='';
+
+                $date = strftime("%Y-%m-%d", time());
+                $exif = false;
+                if(function_exists('exif_read_data')) {
+                    $exif = @exif_read_data($target_path, 0 , true);
+                    if($exif && isset($exif["EXIF"]["DateTimeOriginal"])) {
+                        $date = str_replace(":","-",substr($exif["EXIF"]["DateTimeOriginal"], 0, 10));
+                    }
+                }
+                $GLOBALS['adlerweb']['tpl']->assign('edate', $date);
+
+                if($exif && isset($exif['EXIF']) && count($exif['EXIF']) > 0) {
+                    $descr.='Daten der Kamera:'."\n";
+                    $descr.='================='."\n";
+                    foreach($exif["EXIF"] as $key => $value) {
+                        if($key != 'MakerNote' && $key != 'ComponentsConfiguration' && $key != 'UserComment')
+                            $abstract.=$key.' = '.$value."\n";
+                    }
+                }
+                $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users where Level = '1';");
+                $users = array();
+                $allowed = array();
+                while($item = $lmlist->fetch_assoc()) {
+                    $users[]=$item;
+                    $allowed[]=strtolower($item['UserID']);
+                }
+
+                    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users where Level = '255';");
+                    $cuser = array();
+                    $allowed = array();
+                    while($item = $clist->fetch_assoc()) {
+                        $cuser[]=$item;
+                        $allowed[]=strtolower($item['UserID']);
+                    }
+
+                    $clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
+                    $clusters = array();
+                    $allowed = array();
+                    while($item = $clusterslist->fetch_assoc()) {
+                        $clusters[]=$item;
+                        $allowed[]=strtolower($item['clusterId']);
+                    }
+                    $name = $_SESSION['adlerweb']['session']['user'];
+                    $loginuser = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users WHERE Username = '$name';");
+                    //$GLOBALS['adlerweb']['tpl']->assign('loginuser',  $loginuser);
+                    $inuser = array();
+                    $allowed = array();
+                    while($item = $loginuser->fetch_assoc()) {
+                        $inuser[]=$item;
+                        $allowed[]=strtolower($item['UserID']);
+                    }
+                    //die (var_dump($))
+
+                    $published_status = array("NO","YES");
+
+                    $dummy = array(
+                        'dateUpload' => '',
+                        //'dateModerated' => '',
+                        'lecturerId' => '',
+                        //'moderatorId' => '',
+                        'studentNumber' => '',
+                        'coordinatorId' => '',
+                        'clusterId' => '',
+                        'publishedStatus' => '',
+                        'abstract' => '',
+                        'paperId' => 0
+                    );
+
+                    $details = $dummy;
+                    if(isset($_REQUEST['id'])) {
+                        $details = $GLOBALS['adlerweb']['sql']->querystmt_single("SELECT * FROM papers WHERE `paperId` = ?;", 'i', $_REQUEST['id']);
+                    }
+
+                    if(!isset($details['Country']) || $details['Country'] == '') {
+                        $lang = strtoupper(lang_getfrombrowser ($allowed, 'na', null, false));
+                    }
+                    else{
+                        $lang = $details['Country'];
+                    }
+                    //die ("id : ".$id);
+                $GLOBALS['adlerweb']['tpl']->assign('hash', $hash);
+                $GLOBALS['adlerweb']['tpl']->assign('id', $id);
+                $GLOBALS['adlerweb']['tpl']->assign('date', $date);
+                $GLOBALS['adlerweb']['tpl']->assign('$abstract', htmlentities($abstract));
+              //  $GLOBALS['adlerweb']['tpl']->assign('ScanDate', strftime("%Y-%m-%d", time()));
+                $GLOBALS['adlerweb']['tpl']->assign('ScanUser', $_SESSION['adlerweb']['session']['user']);
+                //$GLOBALS['adlerweb']['tpl']->assign('ScanUserShort', $_SESSION['adlerweb']['session']['short']);
+                //$GLOBALS['adlerweb']['tpl']->assign('Format', gettopformat());
+              //  $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 2 von 2');
+                $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
+                $GLOBALS['adlerweb']['tpl']->assign('menue', 'content_create');
+                $GLOBALS['adlerweb']['tpl']->assign('users', $users);
+                $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
+                $GLOBALS['adlerweb']['tpl']->assign('clusters', $clusters);
+                $GLOBALS['adlerweb']['tpl']->assign('inuser', $inuser);
+                $GLOBALS['adlerweb']['tpl']->assign('published_status', $published_status);
+                $GLOBALS['adlerweb']['tpl']->assign('details', $details);
+                $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
+            }
+
+
+        }
+
+    }
+}elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'To capture' && isset($_REQUEST['sourceSHA256'])) {
+    $source_path = "data/tmp/";
+    $source_path .= $_REQUEST['sourceSHA256'];
+    $target_path = "data/org/";
+    $cache_path = "data/cache/";
+    $itemid = $_REQUEST['paperId'];
+    //die("id: $itemid");
+
+    $target_path .= $itemid;
+    $cache_path .= $itemid;
+
+    if(!file_exists($source_path)) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
-    }elseif($_REQUEST['id'] != '0' && !$GLOBALS['adlerweb']['sql']->querystmt("UPDATE papers SET
-            <!--`dateUpload` = ?,-->
-            <!--`dateModerated` = ?,-->
-            `lecturerId` = ?,
-          <!--  `moderatorId` = ?,-->
-            `studentNumber` = ?,
-            `coordinatorId` = ?,
-            `clusterId` = ?,
-            `publishedStatus` = ?,
-            `abstract` = ?
-            WHERE paperId = ?",
-            str_repeat('s', 6).'i',
-            array(
-        $_REQUEST['dateUpload'],
-		//$_REQUEST['dateModerated'],
-		$_REQUEST['lecturerId'],
-	//	$_REQUEST['moderatorId'],
-		$_REQUEST['studentNumber'],
-		$_REQUEST['coordinatorId'],
-        $_REQUEST['clusterId'],
-		$_REQUEST['publishedStatus'],
-        $_REQUEST['abstract'],
-        $_REQUEST['id']
-            )
-        )) {
-        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Refresh not possible');
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The source file was not found.'.$back);
+    }elseif(file_exists($target_path)){
+        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
-    }else{
-        $back2='<div class="centered infobox_addtext"><a href="?m=paper_list">&raquo; View Papers &raquo;</a></div>';
-        $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
-        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Paper Information was successfully recorded!');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Paper Information was successfully recorded!. '.$back2);
-        $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
-        infomail("New Paper", print_r($_REQUEST, true));
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The destination file already exists.'.$back);
+    }elseif(file_exists($cache_path)){
+        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+        $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The cache file already exists.'.$back);
+    }/*elseif(!isset($_REQUEST['Sender']) || !isset($_REQUEST['Receiver']) || !($cids=getcontacts($_REQUEST['Sender'], $_REQUEST['Receiver']))) {
+//Die("here");
+        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+        $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The contacts could not be assigned.'.$back);
+    }*/else{
+        $finfo = new finfo(FILEINFO_MIME);
+        $mime = $finfo->file($source_path);
+        $suffix=false;
+        if(strpos($mime, 'application/pdf') !== false) $suffix = 'pdf';
+        if(strpos($mime, 'image/png') !== false) $suffix = 'png';
+        if(strpos($mime, 'image/jpeg') !== false) $suffix = 'jpg';
+
+        if(!isset($_REQUEST['OCR'])) $_REQUEST['OCR'] = 0;
+
+        $success = false;
+
+        if(
+           !isset($_REQUEST['lecturerId'])
+        || !isset($_REQUEST['abstract'])
+        || !isset($_REQUEST['studentNumber'])
+        || !isset($_REQUEST['coordinatorId'])) {
+            $GLOBALS['adlerweb']['tpl']->assign ('titel',  'Can not capture');
+            $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'Not all fields were submitted.'.$back);
+        }else{
+//Die("here");
+            $format = gettopformat();
+
+            if(isset($_REQUEST['FormatTop']) && $_REQUEST['FormatTop'] != '') $format = $_REQUEST['FormatTop'];
+            if(isset($_REQUEST['Format']) && $_REQUEST['Format'] != '') $format = $_REQUEST['Format'];
+//Die($format);
+//echo $target_path.'.'.$suffix;
+//echo "<br />".$source_path;
+//echo "<br />".$cache_path;
+  //          rename($source_path, $target_path.'.'.$suffix);
+
+    //        copy($target_path.'.'.$suffix, $cache_path.'.png');
+      //      die();
+            if(!$suffix) {
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The source file has an unknown type.'.$back);
+            }elseif(($GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers(dateUpload, lecturerId,
+              studentNumber, clusterId, publishedStatus, coordinatorId, abstract, sourceSHA256)
+              VALUES ( NOW(), ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 7), array(
+                $_REQUEST['lecturerId'],
+                $_REQUEST['studentNumber'],
+                $_REQUEST['clusterId'],
+                $_REQUEST['publishedStatus'],
+                $_REQUEST['coordinatorId'],
+                $_REQUEST['abstract'],
+                $_REQUEST['sourceSHA256']
+            ))) === false) {
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+                $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'A database error has occurred #103.'.$back);
+            }else{
+
+                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
+                $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
+                $GLOBALS['adlerweb']['tpl']->assign('titel',  'Archive records successfully!');
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The archived material was successfully transferred to the database.Can not capture'.$back2);
+                $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
+                //infomail("New Archive AdAR", $_REQUEST['Caption']);
+            }
+        }
     }
 }else{
-    $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '3';");
-    $users = array();
-    $allowed = array();
-    while($item = $lmlist->fetch_assoc()) {
-        $users[]=$item;
-        $allowed[]=strtolower($item['UserID']);
-    }
-
-	$clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name FROM users where Level = '4';");
-	$cuser = array();
-	$allowed = array();
-	
-	while($item = $clist->fetch_assoc()) {
-		$cuser[]=$item;
-		$allowed[]=strtolower($item['UserID']);
-	}
-
-	$clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
-	$clusters = array();
-	$allowed = array();
-	while($item = $clusterslist->fetch_assoc()) {
-		$clusters[]=$item;
-		$allowed[]=strtolower($item['clusterId']);
-	}
-
-	$published_status = array("NO","YES");
 
 
-    $dummy = array(
-        'dateUpload' => '',
-        //'dateModerated' => '',
-        'lecturerId' => '',
-        //'moderatorId' => '',
-        'studentNumber' => '',
-        'coordinatorId' => '',
-        'clusterId' => '',
-        'publishedStatus' => '',
-        'abstract' => '',
-        'paperId' => 0
-    );
-
-    $details = $dummy;
-    if(isset($_REQUEST['id'])) {
-        $details = $GLOBALS['adlerweb']['sql']->querystmt_single("SELECT * FROM papers WHERE `paperId` = ?;", 'i', $_REQUEST['id']);
-    }
-
-    if(!isset($details['Country']) || $details['Country'] == '') {
-        $lang = strtoupper(lang_getfrombrowser ($allowed, 'na', null, false));
-    }else{
-        $lang = $details['Country'];
-    }
-
-    $GLOBALS['adlerweb']['tpl']->assign('titel', 'Paper Information');
+    $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 1 von 2');
     $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
-    $GLOBALS['adlerweb']['tpl']->assign('users', $users);
-    $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
-    $GLOBALS['adlerweb']['tpl']->assign('clusters', $clusters);
-    $GLOBALS['adlerweb']['tpl']->assign('published_status', $published_status);
-    $GLOBALS['adlerweb']['tpl']->assign('details', $details);
-    $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
+}
+
+function procimg($src, $trg) {
+//  die("procimg");
+return true;
+    $img = imagecreatefromjpeg($src);
+    if(!$img) return false;
+    return imagepng($img, $trg, 9);
+}
+
+function procpdf($src, $trg) {
+  return true;
+    if(!file_exists($src)) return false;
+    //die("src: $src trg: $trg");
+    exec('convert '.escapeshellarg($src).' '.escapeshellarg($trg), $dummy, $return);
+    if($return != 0) return false;
+    return true;
+}
+
+function getcontacts($s, $r) {
+    $out['s'] = getcontact($s);
+    $out['r'] = getcontact($r);
+    if($out['s'] == false || $out['r'] == false) return false;
+    return $out;
+}
+
+function getcontact($name) {
+    if(!preg_match("|^(.+), ([^,]*)$|", $name, $match)) return false;
+    $detail=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID FROM `users` WHERE Surname LIKE ? AND Username LIKE ?", 'ss', array($match[1], $match[2]));
+    if(!$detail) return false;
+    return $detail['UserID'];
+}
+
+function gettopformat() {
+    $detail=$GLOBALS['adlerweb']['sql']->query("SELECT COUNT(Format) as ANZ, Format FROM `Items` WHERE Format IS NOT NULL GROUP BY Format ORDER BY ANZ DESC LIMIT 1;");
+    if($detail->num_rows != 1) return false;
+    $detail=$detail->fetch_object();
+    return $detail->Format;
 }
 ?>

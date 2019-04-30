@@ -16,7 +16,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
 	function getUsers() {
     //if(!preg_match("|^(.+), ([^,]*)$|", $name, $match)) return false;
-    $detail=$GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Nickname, EMail, Level, UIdent FROM users");
+    $detail=$GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username, Surname, EMail, Level, Name FROM users");
     if(!$detail) return false;
     return $detail;
 }
