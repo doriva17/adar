@@ -4,7 +4,11 @@
 
         <legend>User Information</legend>
 
-        <table style="width:100%">		
+        <table style="width:100%">	
+            <tr>
+                <td><label for="Name">Staff/Student Number:</label></td>
+                <td><input type="text" id="sNumber" {if $details.sNumber !== null} value="{$details.sNumber}"{/if} size="50" /></td>
+            </tr>	
             <tr>
 				<td><label for="Level">Register As:</label></td>
 				<td>
@@ -37,8 +41,9 @@
             </tr>
             <tr>  
                 <td><label for="Gender">Gender:</label></td>
-                <td><tr><input type="radio" name="Gender" value="male"> Male<br>
-				<input type="radio" name="Gender" value="female"> Female<br></td>
+                <td>
+                <input type="radio" name="Gender" {if $details.Gender == male} checked="checked"{/if} value="male"> Male<br>
+				<input type="radio" name="Gender" {if $details.Gender == female} checked="checked"{/if} value="female"> Female<br></td>
             </tr>
             <tr>
                 <td><label for="Username">Username:</label> * </td>
@@ -46,7 +51,7 @@
             </tr>
             <tr>
                 <td><label for="Password">Password:</label></td>
-                <td><input type="password" id="Password" {if $details.Password !== null} value="{$details.Password}"{/if} size="50" /></td>
+                <td><input type="password" id="Password" value="" size="50" /></td>
             </tr>  
             <tr>
 				<td><label for="EMail">EMail:</label></td>
@@ -63,14 +68,13 @@
 			</tr>
             <tr>
 				<td><label for="Active">Active:</label></td>
-				<td><input type="radio" name="Active" value="Yes" checked="checked"> Yes<br>
-				<input type="radio" name="Active" value="No"> No<br></td>
+				<td><input type="radio" name="Active" {if $details.Active == Yes} checked="checked"{/if} value="Yes"> Yes<br>
+				<input type="radio" name="Active" {if $details.Active == No} checked="checked"{/if} value="No"> No<br></td>
 			</tr>
 
         </table>
     </fieldset><br />
 
-	<input type="hidden" name="sNumber" value="1" />
     <input type="hidden" name="m" value="user_create" />
     <input type="hidden" name="id" value="{if $details.UserID !== null}{$details.UserID}{else}0{/if}" />
     <input type="submit" name="a" value="To capture" />

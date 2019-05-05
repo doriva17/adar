@@ -14,7 +14,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['Surname'])
     && isset($_REQUEST['Gender'])
     && isset($_REQUEST['Username'])
-    && isset($_REQUEST['Password'])
     && isset($_REQUEST['EMail'])
     && isset($_REQUEST['ContactNo'])
     && isset($_REQUEST['Image'])
@@ -50,10 +49,10 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `Surname` = ?,
             `Gender` = ?,
             `Username` = ?,
-            `Password` = ?,
             `EMail` = ?,
             `ContactNo` = ?,
             `Image` = ?,
+            `sNumber` = ?,
             `Active` = ?,
             `Level` = ?
             WHERE UserID = ?",
@@ -64,10 +63,10 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 				$_REQUEST['Surname'],
 				$_REQUEST['Gender'],
 				$_REQUEST['Username'],
-				$GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
 				$_REQUEST['EMail'],
 				$_REQUEST['ContactNo'],
 				$_REQUEST['Image'],
+				$_REQUEST['sNumber'],
 				$_REQUEST['Active'],
 				$_REQUEST['Level'],
                 $_REQUEST['id']
@@ -82,7 +81,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'User successfully recorded!');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The user has been successfully transferred to the database. '.$back2);
         $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
-        infomail("New user AdAr", print_r($_REQUEST, true));
+        infomail("New User Created", "New user successfully created". print_r($_REQUEST['Name'], true));
     }
 }else{
 
@@ -100,7 +99,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         'Surname' => '',
         'Gender' => '',
         'Username' => '',
-        'Password' => '',
         'EMail' => '',
         'ContactNo' => '',
         'Image' => '',

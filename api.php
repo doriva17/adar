@@ -168,15 +168,11 @@ elseif($requestData['source']=="users"){
 	//user management
 	$columns = array(
 // datatable column index  => database column name
-	0 => array(false, 'UserID', false),
-	1 => array(false, 'Title', false),
-	2 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'Users'))),
-	3 => array(false, 'Username', false),
-	4 => array(false, 'EMail', false),
-	5 => array(false, 'ContactNo', false),
-	6 => array(false, 'Image', false),
-	7 => array(false, 'roleName', false),
-	8 => array(false, 'Active', false)
+	1 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'Users'))),
+	2 => array(false, 'EMail', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'EMail'))),
+	3 => array(false, 'ContactNo', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'ContactNo'))),
+	4 => array(false, 'roleName', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'roleName'))),
+	5 => array(false, 'Active', false)
 
 );
 
@@ -243,13 +239,9 @@ for($i=0; $i<count($columns); $i++) {
 if(!empty($requestData['search']['value'])) {
     $sql_filter.="
         AND (
-            `UserID` LIKE ? OR
-            `Title` LIKE ? OR
             CONCAT(`Users`.`Name`,\", \",`Users`.`Surname`) LIKE ? OR
-            `Username` LIKE ? OR
             `EMail` LIKE ? OR
             `ContactNo` LIKE ? OR
-            `Image` LIKE ? OR
 			`roleName` LIKE ? OR
 			`Active` LIKE ? OR
         ) ";
