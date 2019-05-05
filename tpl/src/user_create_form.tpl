@@ -37,7 +37,7 @@
             </tr>
             <tr>  
                 <td><label for="Gender">Gender:</label></td>
-                <td><input type="radio" name="Gender" value="male"> Male<br>
+                <td><tr><input type="radio" name="Gender" value="male"> Male<br>
 				<input type="radio" name="Gender" value="female"> Female<br></td>
             </tr>
             <tr>
@@ -63,7 +63,7 @@
 			</tr>
             <tr>
 				<td><label for="Active">Active:</label></td>
-				<td><input type="radio" name="Active" value="Yes"> Yes<br>
+				<td><input type="radio" name="Active" value="Yes" checked="checked"> Yes<br>
 				<input type="radio" name="Active" value="No"> No<br></td>
 			</tr>
 

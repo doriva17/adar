@@ -20,7 +20,7 @@
                         </nobr>
                     </div>
                 </div>
-                {if $loginlevel >= 192}
+                {if $loginlevel  == 'administrator'}
                 <div class="infobox_half_right">
                     <div class="infobox_header">
                         <label for="Description"><img src="vendor/koala-framework/library-silkicons/tag_blue_add.png" alt="" /> Tags</label>
