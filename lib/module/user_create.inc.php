@@ -18,12 +18,13 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['EMail'])
     && isset($_REQUEST['ContactNo'])
     && isset($_REQUEST['Image'])
+    && isset($_REQUEST['sNumber'])
     && isset($_REQUEST['Active'])
     && isset($_REQUEST['Level'])
 ) {		
 
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )", str_repeat('s', 11), array(
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 12), array(
             $_REQUEST['Title'],
             $_REQUEST['Name'],
             $_REQUEST['Surname'],
@@ -33,6 +34,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $_REQUEST['EMail'],
             $_REQUEST['ContactNo'],
             $_REQUEST['Image'],
+            $_REQUEST['sNumber'],
             $_REQUEST['Active'],
             $_REQUEST['Level']
         ))
@@ -102,6 +104,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         'EMail' => '',
         'ContactNo' => '',
         'Image' => '',
+        'sNumber' => '',
         'Active' => '',
         'Level' => '',
         'UserID' => 0

@@ -4,7 +4,17 @@
 
         <legend>User Information</legend>
 
-        <table style="width:100%">			
+        <table style="width:100%">		
+            <tr>
+				<td><label for="Level">Register As:</label></td>
+				<td>
+				<select id="Level" name="Level">
+                	{foreach from=$roles item=c}
+                        <option value="{$c.roleID}" {If $lang == $c.roleID}selected="selected"{/if}>{$c.roleName}</option>
+                    {/foreach}
+                </select>
+				</td>
+			</tr>	
             <tr>
 				<td><label for="Title">Title:</label></td>
 				<td>
@@ -31,7 +41,7 @@
 				<input type="radio" name="Gender" value="female"> Female<br></td>
             </tr>
             <tr>
-                <td><label for="Username">Username:</label></td>
+                <td><label for="Username">Username:</label> * </td>
                 <td><input type="text" id="Username" {if $details.Username !== null} value="{$details.Username}"{/if} size="50" /></td>
             </tr>
             <tr>
@@ -48,16 +58,6 @@
                 <td><input type="text" id="ContactNo" {if $details.ContactNo !== null} value="{$details.ContactNo}"{/if} size="50" /></td>
             </tr>
             <tr>
-				<td><label for="Level">Register As:</label></td>
-				<td>
-				<select id="Level" name="Level">
-                	{foreach from=$roles item=c}
-                        <option value="{$c.roleID}" {If $lang == $c.roleID}selected="selected"{/if}>{$c.roleName}</option>
-                    {/foreach}
-                </select>
-				</td>
-			</tr>
-            <tr>
 				<td><label for="Image">Image:</label></td>
 				<td><input type="file" id="Image" {if $details.Image !== null} value="{$details.Image}"{/if} /></td>
 			</tr>
@@ -70,6 +70,7 @@
         </table>
     </fieldset><br />
 
+	<input type="hidden" name="sNumber" value="1" />
     <input type="hidden" name="m" value="user_create" />
     <input type="hidden" name="id" value="{if $details.UserID !== null}{$details.UserID}{else}0{/if}" />
     <input type="submit" name="a" value="To capture" />
