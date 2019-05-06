@@ -42,4 +42,9 @@
 			<img src="vendor/koala-framework/library-silkicons/user.png" /> User Management</a></div>
             <div class="menu_item"><a href="#" onclick="init();"><img src="vendor/koala-framework/library-silkicons/wrench.png" /> System Parameters</a></div>
     	{/if}
+      {if $loginlevel >= 1}
+      <div class="menu_item {if $menue=='student_register'}menu_item_selected{/if}">
+			<a href="?m=student_register"><img src="vendor/koala-framework/library-silkicons/page_add.png" />Register Student</a></div>
+      {/if}
+
     </div>
