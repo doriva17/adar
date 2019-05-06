@@ -50,4 +50,5 @@
         
             <div class="menu_item {if $menue=='session_logout'}menu_item_selected{/if}"><a href="?m=session_logout"><img src="vendor/koala-framework/library-silkicons/lock_break.png" /> Sign out</a></div>        
 	    {/if}
+
     </div>

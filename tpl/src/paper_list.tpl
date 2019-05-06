@@ -10,15 +10,16 @@
 
         </tr>
     </thead>
-    <!--thead>
+    <thead>
         <tr>
             <td><input type="text" id="0" class="itemlist-input"></td>
             <td><input type="text" id="1" class="itemlist-input"></td>
             <td><input type="text" id="2" class="itemlist-input" ></td>
             <td><input type="text" id="3" class="itemlist-input" ></td>
+            <td><input type="text" id="3" class="itemlist-input" ></td>
 
         </tr>
-    </thead-->
+    </thead>
 </table>
 
 <a href="?m=content_create">
