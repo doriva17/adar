@@ -20,9 +20,9 @@
             <tr>
                 <td><label for="Name">First Name:</label></td>
                 <!--td><input type="text" id="Name" {if $details.Name !== null} value="{$details.Name}"{/if} size="50" /></td-->
-              <td>  <select id="Level" name="Level">
+              <td>  <select id="Name" name="Name">
                         	{foreach from=$student item=c}
-                                <option value="{$c.firstName}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.studentNumber}</option>
+                                <option value="{$c.firstName}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.firstName}</option>
                             {/foreach}
                         </select>
                         </td>
@@ -30,21 +30,33 @@
             <tr>
                 <td><label for="Surname">Surname:</label></td>
                 <!--td><input type="text" id="Surname" {if $details.Surname !== null} value="{$details.Surname}"{/if} size="50" /></td-->
-              <td>  <select id="Level" name="Level">
+              <td>  <select id="Surname" name="Surname">
                         	{foreach from=$student item=c}
-                                <option value="{$c.surname}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.studentNumber}</option>
+                                <option value="{$c.surname}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.surname}</option>
                             {/foreach}
                         </select>
                         </td>
             </tr>
             <tr>
                 <td><label for="Gender">Gender:</label></td>
-                <td><input type="radio" name="Gender" value="male"> Male<br>
-				<input type="radio" name="Gender" value="female"> Female<br></td>
+                <!--td><input type="radio" name="Gender" value="male"> Male<br>
+				<input type="radio" name="Gender" value="female"> Female<br></td-->
+        <td>  <select id="Gender" name="Gender">
+                    {foreach from=$student item=c}
+                          <option value="{$c.gender}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.gender}</option>
+                      {/foreach}
+                  </select>
+                  </td>
             </tr>
             <tr>
                 <td><label for="Username">Username:</label></td>
-                <td><input type="text" id="Username" {if $details.Username !== null} value="{$details.Username}"{/if} size="50" /></td>
+                <!--td><input type="text" id="Username" {if $details.Username !== null} value="{$details.Username}"{/if} size="50" /></td-->
+                <td>  <select id="Username" name="Username">
+                          	{foreach from=$student item=c}
+                                  <option value="{$c.studentNumber}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.studentNumber}</option>
+                              {/foreach}
+                          </select>
+                          </td>
             </tr>
             <tr>
                 <td><label for="Password">Password:</label></td>

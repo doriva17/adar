@@ -4,8 +4,12 @@ $back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)"
 
 if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
+    die ("here");
     $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
     $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to enter new Users.'.$back);
+}elseif (isset($_REQUEST['a']) && $_REQUEST['a'] == 'SearchStudent') {
+  $student_number = $_REQUEST['student_number'];
+  die ("$student_number");
 }elseif(isset($_REQUEST['a'])
     && $_REQUEST['a'] == 'To capture'
     && isset($_REQUEST['id'])
@@ -84,18 +88,18 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     }
 }else{
 
-    $rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles;");
+    $rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles WHERE roleName = 'student';");
     $roles = array();
     $allowed = array();
     while($item = $rlist->fetch_assoc()) {
         $roles[]=$item;
         $allowed[]=strtolower($item['roleID']);
     }
-    $slist = $GLOBALS['adlerweb']['sql']->query("SELECT studentNumber, firstName, surname FROM student;");
+    $slist = $GLOBALS['adlerweb']['sql']->query("SELECT studentNumber, firstName, surname, gender FROM student;");
     $student = array();
     $allowed = array();
     while($item = $slist->fetch_assoc()) {
-        $roles[]=$item;
+        $student[]=$item;
         $allowed[]=strtolower($item['studentNumber']);
     }
 
@@ -126,10 +130,10 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     }
 
     $GLOBALS['adlerweb']['tpl']->assign('titel', 'Student Information');
-    $GLOBALS['adlerweb']['tpl']->assign('modul', 'student_register_form');
+    $GLOBALS['adlerweb']['tpl']->assign('modul', 'student_find');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'student_register_form');
     $GLOBALS['adlerweb']['tpl']->assign('roles', $roles);
-    $GLOBALS['adlerweb']['tpl']->assign('roles', $student);
+    $GLOBALS['adlerweb']['tpl']->assign('student', $student);
     $GLOBALS['adlerweb']['tpl']->assign('details', $details);
     $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }
