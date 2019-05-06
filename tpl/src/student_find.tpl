@@ -7,7 +7,7 @@
         <div class="infobox_content">
             <form action="index.php" method="POST">
                 <input type="text" name="student_number" />
-                <input type="hidden" name="m" value="student_register_form" />
+                <input type="hidden" name="m" value="student_register" />
                 <input type="submit" name="a" value="SearchStudent" />
             </form>
         </div>

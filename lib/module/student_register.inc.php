@@ -4,7 +4,7 @@ $back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)"
 
 if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
-    die ("here");
+    
     $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
     $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to enter new Users.'.$back);
 }elseif (isset($_REQUEST['a']) && $_REQUEST['a'] == 'SearchStudent') {
@@ -43,6 +43,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     ) {
 
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
+
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
     }
@@ -76,10 +77,12 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             )
         )) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Refresh not possible');
+
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
     }else{
         $back2='<div class="centered infobox_addtext"><a href="?m=user_list">&raquo; To the User List &raquo;</a></div>';
+
         $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'User successfully recorded!');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The user has been successfully transferred to the database. '.$back2);
