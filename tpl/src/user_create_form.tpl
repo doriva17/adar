@@ -7,7 +7,7 @@
         <table style="width:100%">	
             <tr>
                 <td><label for="Name">Staff/Student Number:</label></td>
-                <td><input type="text" id="sNumber" {if $details.sNumber !== null} value="{$details.sNumber}"{/if} size="50" /></td>
+                <td><input type="text" id="sNumber"  onfocus="dynReq(this, 's', 'Student', 1);" onkeyup="dynReq(this, 's', 'Student', 1);" onblur="dynReqBlur(this);" /></td>
             </tr>	
             <tr>
 				<td><label for="Level">Register As:</label></td>

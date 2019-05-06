@@ -45,7 +45,7 @@
                     $("#itemlist_processing").css("display","none");
                 }*/
             },
-            "order": [[ 3, "desc" ]]
+            "order": [[ 1, "asc" ]]
         } );
 
         $('.itemlist-input').on( 'keyup click change', function () {

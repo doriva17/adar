@@ -58,6 +58,7 @@ switch($_GET['m']) {
         if(!preg_match('/^[\w\d\s,\-\.|]*$/', $q)) $q='';
         $detail=$GLOBALS['adlerweb']['sql']->querystmt("SELECT studentID, studentNumber, firstName, surname, course 
 		FROM `student` WHERE studentNumber LIKE ? OR firstName LIKE ? OR surname LIKE ? ORDER BY firstName", 'iss', array('%'.$q.'%', '%'.$q.'%', '%'.$q.'%'));
+		
         if(!$detail) die();
         echo '<ul>';
         foreach($detail as $f) {
