@@ -4,12 +4,61 @@ $back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)"
 
 if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
-    
+
     $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
     $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to enter new Users.'.$back);
 }elseif (isset($_REQUEST['a']) && $_REQUEST['a'] == 'SearchStudent') {
   $student_number = $_REQUEST['student_number'];
-  die ("$student_number");
+  //die ("$student_number");
+
+  $rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles WHERE roleName = 'student';");
+  $roles = array();
+  $allowed = array();
+  while($item = $rlist->fetch_assoc()) {
+      $roles[]=$item;
+      $allowed[]=strtolower($item['roleID']);
+  }
+  $slist = $GLOBALS['adlerweb']['sql']->query("SELECT studentNumber, firstName, surname, gender FROM student WHERE studentNumber = '$student_number';");
+  $student = array();
+  $allowed = array();
+  while($item = $slist->fetch_assoc()) {
+      $student[]=$item;
+      $allowed[]=strtolower($item['studentNumber']);
+  }
+
+  $dummy = array(
+      'Title' => '',
+      'Name' => '',
+      'Surname' => '',
+      'Gender' => '',
+      'Username' => '',
+      'Password' => '',
+      'EMail' => '',
+      'ContactNo' => '',
+      'Image' => '',
+      'Active' => '',
+      'Level' => '',
+      'UserID' => 0
+  );
+
+  $details = $dummy;
+  if(isset($_REQUEST['id']) && $_REQUEST['id'] != '0') {
+      $details = $GLOBALS['adlerweb']['sql']->querystmt_single("SELECT * FROM Users WHERE `UserID` = ?;", 'i', $_REQUEST['id']);
+  }
+
+  if(!isset($details['Level']) || $details['Level'] == '') {
+      $lang = strtoupper(lang_getfrombrowser ($allowed, 'na', null, false));
+  }else{
+      $lang = $details['Level'];
+  }
+//die ("$student_number");
+  $GLOBALS['adlerweb']['tpl']->assign('titel', 'Student Information');
+  $GLOBALS['adlerweb']['tpl']->assign('modul', 'student_register_form');
+  $GLOBALS['adlerweb']['tpl']->assign('menue', 'student_register_form');
+  $GLOBALS['adlerweb']['tpl']->assign('roles', $roles);
+  $GLOBALS['adlerweb']['tpl']->assign('student', $student);
+  $GLOBALS['adlerweb']['tpl']->assign('details', $details);
+  $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }elseif(isset($_REQUEST['a'])
     && $_REQUEST['a'] == 'To capture'
     && isset($_REQUEST['id'])
@@ -91,7 +140,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     }
 }else{
 
-    $rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles WHERE roleName = 'student';");
+  /*  $rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles WHERE roleName = 'student';");
     $roles = array();
     $allowed = array();
     while($item = $rlist->fetch_assoc()) {
@@ -130,14 +179,14 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $lang = strtoupper(lang_getfrombrowser ($allowed, 'na', null, false));
     }else{
         $lang = $details['Level'];
-    }
+    }*/
 
     $GLOBALS['adlerweb']['tpl']->assign('titel', 'Student Information');
     $GLOBALS['adlerweb']['tpl']->assign('modul', 'student_find');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'student_register_form');
-    $GLOBALS['adlerweb']['tpl']->assign('roles', $roles);
-    $GLOBALS['adlerweb']['tpl']->assign('student', $student);
-    $GLOBALS['adlerweb']['tpl']->assign('details', $details);
-    $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
+    //$GLOBALS['adlerweb']['tpl']->assign('roles', $roles);
+    //$GLOBALS['adlerweb']['tpl']->assign('student', $student);
+    //$GLOBALS['adlerweb']['tpl']->assign('details', $details);
+    //$GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }
 ?>
