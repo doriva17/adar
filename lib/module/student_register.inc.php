@@ -60,6 +60,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
   $GLOBALS['adlerweb']['tpl']->assign('details', $details);
   $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }elseif(isset($_REQUEST['a'])
+
     && $_REQUEST['a'] == 'To capture'
     && isset($_REQUEST['id'])
     && isset($_REQUEST['Title'])
@@ -73,6 +74,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['Image'])
     && isset($_REQUEST['Active'])
     && isset($_REQUEST['Level'])
+
+
 ) {
 
     if($_REQUEST['id'] == '0'
