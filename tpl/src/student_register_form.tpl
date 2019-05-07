@@ -81,10 +81,10 @@
                 </select>
 				</td>
 			</tr>
-            <tr>
+            <!--tr>
 				<td><label for="Image">Image:</label></td>
 				<td><input type="file" id="Image" {if $details.Image !== null} value="{$details.Image}"{/if} /></td>
-			</tr>
+			</tr-->
             <tr>
 				<td><label for="Active">Active:</label></td>
 				<td><input type="radio" name="Active" value="Yes"> Yes<br>

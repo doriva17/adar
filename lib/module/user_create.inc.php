@@ -17,13 +17,13 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['Password'])
     && isset($_REQUEST['EMail'])
     && isset($_REQUEST['ContactNo'])
-    && isset($_REQUEST['Image'])
+    //&& isset($_REQUEST['Image'])
     && isset($_REQUEST['Active'])
     && isset($_REQUEST['Level'])
-) {		
+) {
 
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )", str_repeat('s', 11), array(
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 10), array(
             $_REQUEST['Title'],
             $_REQUEST['Name'],
             $_REQUEST['Surname'],
@@ -32,16 +32,16 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
             $_REQUEST['EMail'],
             $_REQUEST['ContactNo'],
-            $_REQUEST['Image'],
+            //$_REQUEST['Image'],
             $_REQUEST['Active'],
             $_REQUEST['Level']
         ))
     ) {
-		
+
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
-    } 
+    }
 	elseif($_REQUEST['id'] != '0' && !$GLOBALS['adlerweb']['sql']->querystmt("UPDATE Users SET
             `Title` = ?,
             `Name` = ?,
@@ -51,11 +51,11 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `Password` = ?,
             `EMail` = ?,
             `ContactNo` = ?,
-            `Image` = ?,
+
             `Active` = ?,
             `Level` = ?
             WHERE UserID = ?",
-            str_repeat('s', 11).'i',
+            str_repeat('s', 10).'i',
             array(
                 $_REQUEST['Title'],
 				$_REQUEST['Name'],
@@ -65,7 +65,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 				$GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
 				$_REQUEST['EMail'],
 				$_REQUEST['ContactNo'],
-				$_REQUEST['Image'],
+				//$_REQUEST['Image'],
 				$_REQUEST['Active'],
 				$_REQUEST['Level'],
                 $_REQUEST['id']
@@ -101,7 +101,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         'Password' => '',
         'EMail' => '',
         'ContactNo' => '',
-        'Image' => '',
+      
         'Active' => '',
         'Level' => '',
         'UserID' => 0

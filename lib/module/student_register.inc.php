@@ -35,7 +35,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
       'Password' => '',
       'EMail' => '',
       'ContactNo' => '',
-      'Image' => '',
+
       'Active' => '',
       'Level' => '',
       'UserID' => 0
@@ -71,7 +71,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['Password'])
     && isset($_REQUEST['EMail'])
     && isset($_REQUEST['ContactNo'])
-    && isset($_REQUEST['Image'])
+    //&& isset($_REQUEST['Image'])
     && isset($_REQUEST['Active'])
     && isset($_REQUEST['Level'])
 
@@ -79,7 +79,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 ) {
 
     if($_REQUEST['id'] == '0'
-        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,? )", str_repeat('s', 11), array(
+        && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 10), array(
             $_REQUEST['Title'],
             $_REQUEST['Name'],
             $_REQUEST['Surname'],
@@ -88,7 +88,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
             $_REQUEST['EMail'],
             $_REQUEST['ContactNo'],
-            $_REQUEST['Image'],
+            //$_REQUEST['Image'],
             $_REQUEST['Active'],
             $_REQUEST['Level']
         ))
@@ -108,7 +108,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `Password` = ?,
             `EMail` = ?,
             `ContactNo` = ?,
-            `Image` = ?,
+
             `Active` = ?,
             `Level` = ?
             WHERE UserID = ?",
@@ -122,7 +122,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 				$GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
 				$_REQUEST['EMail'],
 				$_REQUEST['ContactNo'],
-				$_REQUEST['Image'],
+				//$_REQUEST['Image'],
 				$_REQUEST['Active'],
 				$_REQUEST['Level'],
                 $_REQUEST['id']
