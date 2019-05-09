@@ -39,13 +39,6 @@
                     die();
                 }
 
-                /*$tags = $GLOBALS['adlerweb']['sql']->querystmt("SELECT TagValue FROM Tags WHERE UserID = ?;", 's', $detail['UserID']);
-                $tagarr=array();
-                if($tags) {
-                    foreach($tags as $tag) {
-                        $tagarr[] = $tag['TagValue'];
-                    }
-                }*/
 
 				$rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles;");
 				$roles = array();
@@ -64,7 +57,6 @@
 					'Password' => '',
 					'EMail' => '',
 					'ContactNo' => '',
-					
 					'Active' => '',
 					'Level' => '',
 					'UserID' => 0

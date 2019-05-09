@@ -174,7 +174,6 @@ elseif($requestData['source']=="users"){
 	3 => array(false, 'Username', false),
 	4 => array(false, 'EMail', false),
 	5 => array(false, 'ContactNo', false),
-	//6 => array(false, 'Image', false),
 	6 => array(false, 'roleName', false),
 	7 => array(false, 'Active', false)
 
@@ -249,9 +248,8 @@ if(!empty($requestData['search']['value'])) {
             `Username` LIKE ? OR
             `EMail` LIKE ? OR
             `ContactNo` LIKE ? OR
-            
-			`roleName` LIKE ? OR
-			`Active` LIKE ? OR
+			     `roleName` LIKE ? OR
+			     `Active` LIKE ? OR
         ) ";
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
