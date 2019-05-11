@@ -21,28 +21,14 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There was a database error # 103.'.$back);
     }elseif($_REQUEST['id'] != '0' && !$GLOBALS['adlerweb']['sql']->querystmt("UPDATE cluster SET
-            `dateUpload` = ?,
-            `dateModerated` = ?,
-            `lecturerId` = ?,
-            `moderatorId` = ?,
-            `studentNumber` = ?,
-            `coordinatorId` = ?,
-            `clusterId` = ?,
-            `publishedStatus` = ?,
-            `abstract` = ?
-            WHERE paperId = ?",
-            str_repeat('s', 9).'i',
+            `clustername` = ?,
+            `Description` = ?
+            WHERE clusterId = ?",
+            str_repeat('s', 2).'i',
             array(
-        $_REQUEST['dateUpload'],
-				$_REQUEST['dateModerated'],
-				$_REQUEST['lecturerId'],
-				$_REQUEST['moderatorId'],
-				$_REQUEST['studentNumber'],
-				$_REQUEST['coordinatorId'],
-        $_REQUEST['clusterId'],
-				$_REQUEST['publishedStatus'],
-        $_REQUEST['abstract'],
-        $_REQUEST['id']
+				$_REQUEST['clustername'],
+        $_REQUEST['Description'],
+        $_REQUEST['clusterId']
             )
         )) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Refresh not possible');
