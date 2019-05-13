@@ -52,7 +52,7 @@
                 <!--td><input type="text" id="Username" {if $details.Username !== null} value="{$details.Username}"{/if} size="50" /></td-->
                 <td>  <select id="Username" name="Username">
                           	{foreach from=$student item=c}
-                                  <option value="{$c.studentNumber}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.studentNumber}</option>
+                                  <option value="{$c.studentNumber}" {If $lang == $c.studentNumber}selected="selected"{/if}>{$c.firstName} {$c.surname}</option>
                               {/foreach}
                           </select>
                           </td>
