@@ -152,7 +152,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 //$GLOBALS['adlerweb']['tpl']->assign('Format', gettopformat());
               //  $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 2 von 2');
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
-                $GLOBALS['adlerweb']['tpl']->assign('menue', 'content_create');
+                $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
                 $GLOBALS['adlerweb']['tpl']->assign('users', $users);
                 $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
                 $GLOBALS['adlerweb']['tpl']->assign('clusters', $clusters);
@@ -257,7 +257,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
 
     $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 1 von 2');
-    $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
+    $GLOBALS['adlerweb']['tpl']->assign('modul', 'create_upload');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
 }
 

@@ -7,6 +7,7 @@
             <th>Published Status</th>
             <th>Abstract</th>
 
+
         </tr>
     </thead>
     <!--thead>
@@ -21,7 +22,7 @@
     </thead-->
 </table>
 
-<a href="?m=content_create">
+<a href="?m=paper_create">
 <input type="submit" name="a" value="Record a Paper" />
 </a>
 
@@ -40,6 +41,6 @@
             "order": [[ 3, "desc" ]]
         } );
 
-      
+
     } );
 </script>
