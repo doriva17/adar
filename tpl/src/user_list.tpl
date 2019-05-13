@@ -8,7 +8,7 @@
             <th>Username</th>
             <th>Email</th>
             <th>Contact No</th>
-            <th>Image</th>
+            <!--th>Image</th-->
 			<th>User Roles</th>
             <th>User Status</th>
         </tr>
@@ -23,7 +23,7 @@
 			<td><input type="text" id="5" class="itemlist-input"></td>
             <td><input type="text" id="6" class="itemlist-input" ></td>
             <td><input type="text" id="7" class="itemlist-input" ></td>
-            <td><input type="text" id="8" class="itemlist-input" ></td>
+            <!--td><input type="text" id="8" class="itemlist-input" ></td-->
         </tr>
     </thead>
 </table>

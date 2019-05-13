@@ -81,10 +81,10 @@
                 </select>
 				</td>
 			</tr>
-            <tr>
+            <!--tr>
 				<td><label for="Image">Image:</label></td>
 				<td><input type="file" id="Image" {if $details.Image !== null} value="{$details.Image}"{/if} /></td>
-			</tr>
+			</tr-->
             <tr>
 				<td><label for="Active">Active:</label></td>
 				<td><input type="radio" name="Active" value="Yes"> Yes<br>
@@ -94,7 +94,7 @@
         </table>
     </fieldset><br />
 
-    <input type="hidden" name="m" value="user_create" />
+    <input type="hidden" name="m" value="student_register" />
     <input type="hidden" name="id" value="{if $details.UserID !== null}{$details.UserID}{else}0{/if}" />
     <input type="submit" name="a" value="To capture" />
 </form>
