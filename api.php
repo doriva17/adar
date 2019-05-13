@@ -313,15 +313,17 @@ elseif($requestData['source']=="papers"){
 	$columns = array(
 // datatable column index  => database column name
   0 => array(false, 'paperId', array('<a href="?m=content_detail&id=%s">%s</a>', array('paperId', 'paperId'))),
-  1 => array(false, 'dateModerated', false),
-  2=> array(false, 'dateUpload', false),
+  1=> array(false, 'dateUpload', false),
+  2 => array(false, 'title', false),
   3 => array(false, 'publishedStatus', false),
-	4 => array(false, 'studentNumber', false),
-  5 => array(false, 'abstract', false),
-  6 => array(false, 'coordinatorId', false),
-  7 => array(false, 'lecturerId', false),
-  8 => array(false, 'moderatorId', false),
-  9 => array(false, 'clusterId', false)
+  4 => array(false, 'abstract', false),
+  5 => array(false, 'dateModerated', false),
+	6 => array(false, 'studentNumber', false),
+  7 => array(false, 'coordinatorId', false),
+  8 => array(false, 'lecturerId', false),
+  9 => array(false, 'moderatorId', false),
+  10 => array(false, 'clusterId', false)
+
 
 );
 
@@ -395,6 +397,7 @@ if(!empty($requestData['search']['value'])) {
             `lecturerId` LIKE ? OR
             `moderatorId` LIKE ? OR
             `clusterId` LIKE ? OR
+
         ) ";
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
@@ -406,6 +409,7 @@ if(!empty($requestData['search']['value'])) {
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        //$sql_filter_data[] = '%'.$requestData['search']['value'].'%';
 
 }
 
