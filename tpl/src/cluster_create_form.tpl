@@ -10,12 +10,12 @@
             </tr>
             <tr>
                 <td><label for="clustername">Cluster Name:</label></td>
-                <td><input type="text" id="clustername" {if $details.clustername !== null}
+                <td><input type="text" id="clustername" required {if $details.clustername !== null}
                     value="{$details.clustername}"{/if}/></td>
             </tr>
             <tr>
                 <td><label for="Description">Cluster Description:</label></td>
-                <td><input type="text" id="Description" {if $details.Description!== null} value="{$details.Description}"{/if}/></td>
+                <td><input type="text" id="Description" required {if $details.Description!== null} value="{$details.Description}"{/if}/></td>
             </tr>
             <tr>
                 <td><label for="lecturerID"></label></td>
