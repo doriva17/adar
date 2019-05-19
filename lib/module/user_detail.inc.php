@@ -39,13 +39,6 @@
                     die();
                 }
 
-                /*$tags = $GLOBALS['adlerweb']['sql']->querystmt("SELECT TagValue FROM Tags WHERE UserID = ?;", 's', $detail['UserID']);
-                $tagarr=array();
-                if($tags) {
-                    foreach($tags as $tag) {
-                        $tagarr[] = $tag['TagValue'];
-                    }
-                }*/
 
 				$rlist = $GLOBALS['adlerweb']['sql']->query("SELECT roleID, roleName FROM roles;");
 				$roles = array();
@@ -54,7 +47,7 @@
 					$roles[]=$item;
 					$allowed[]=strtolower($item['roleID']);
 				}
-				
+
 				$dummy = array(
 					'Title' => '',
 					'Name' => '',
@@ -64,7 +57,6 @@
 					'Password' => '',
 					'EMail' => '',
 					'ContactNo' => '',
-					'Image' => '',
 					'Active' => '',
 					'Level' => '',
 					'UserID' => 0
@@ -74,7 +66,7 @@
 				if(isset($_REQUEST['id'])) {
 					$details = $GLOBALS['adlerweb']['sql']->querystmt_single("SELECT * FROM Users WHERE `UserID` = ?;", 'i', $_REQUEST['id']);
 				}
-				
+
 				if(!isset($details['Level']) || $details['Level'] == '') {
 					$lang = strtoupper(lang_getfrombrowser ($allowed, 'na', null, false));
 				}else{
@@ -84,8 +76,8 @@
 				$GLOBALS['adlerweb']['tpl']->assign('details', $details);
 				$GLOBALS['adlerweb']['tpl']->assign('roles', $roles);
 				$GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
-                
-                
+
+
                 $GLOBALS['adlerweb']['tpl']->assign('titel', 'Detail View'.htmlentities($id));
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'user_create_form');
                 $GLOBALS['adlerweb']['tpl']->assign('REQUEST_URI', $_SERVER["REQUEST_URI"]);

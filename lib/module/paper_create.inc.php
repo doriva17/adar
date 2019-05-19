@@ -81,7 +81,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                             $abstract.=$key.' = '.$value."\n";
                     }
                 }
-                $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users where Level = '1';");
+                $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '1';");
                 $users = array();
                 $allowed = array();
                 while($item = $lmlist->fetch_assoc()) {
@@ -89,7 +89,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                     $allowed[]=strtolower($item['UserID']);
                 }
 
-                    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users where Level = '255';");
+                    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '4';");
                     $cuser = array();
                     $allowed = array();
                     while($item = $clist->fetch_assoc()) {
@@ -121,13 +121,13 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                         'dateUpload' => '',
                         //'dateModerated' => '',
                         'lecturerId' => '',
-                        //'moderatorId' => '',
+                        'title' => '',
                         'studentNumber' => '',
                         'coordinatorId' => '',
                         'clusterId' => '',
                         'publishedStatus' => '',
                         'abstract' => '',
-                        'paperId' => 0
+                        'paperId' => ''
                     );
 
                     $details = $dummy;
@@ -152,7 +152,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 //$GLOBALS['adlerweb']['tpl']->assign('Format', gettopformat());
               //  $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 2 von 2');
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
-                $GLOBALS['adlerweb']['tpl']->assign('menue', 'content_create');
+                $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
                 $GLOBALS['adlerweb']['tpl']->assign('users', $users);
                 $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
                 $GLOBALS['adlerweb']['tpl']->assign('clusters', $clusters);
@@ -210,6 +210,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
            !isset($_REQUEST['lecturerId'])
         || !isset($_REQUEST['abstract'])
         || !isset($_REQUEST['studentNumber'])
+        || !isset($_REQUEST['title'])
         || !isset($_REQUEST['coordinatorId'])) {
             $GLOBALS['adlerweb']['tpl']->assign ('titel',  'Can not capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
@@ -220,28 +221,23 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
             if(isset($_REQUEST['FormatTop']) && $_REQUEST['FormatTop'] != '') $format = $_REQUEST['FormatTop'];
             if(isset($_REQUEST['Format']) && $_REQUEST['Format'] != '') $format = $_REQUEST['Format'];
-//Die($format);
-//echo $target_path.'.'.$suffix;
-//echo "<br />".$source_path;
-//echo "<br />".$cache_path;
-  //          rename($source_path, $target_path.'.'.$suffix);
 
-    //        copy($target_path.'.'.$suffix, $cache_path.'.png');
-      //      die();
             if(!$suffix) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The source file has an unknown type.'.$back);
-            }elseif(($GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers(dateUpload, lecturerId,
-              studentNumber, clusterId, publishedStatus, coordinatorId, abstract, sourceSHA256)
-              VALUES ( NOW(), ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 7), array(
+            }elseif(($GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers(paperId, dateUpload, lecturerId,
+              studentNumber, clusterId, publishedStatus, coordinatorId, abstract, sourceSHA256, title)
+              VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 9), array(
+                $_REQUEST['paperId'],
                 $_REQUEST['lecturerId'],
                 $_REQUEST['studentNumber'],
                 $_REQUEST['clusterId'],
                 $_REQUEST['publishedStatus'],
                 $_REQUEST['coordinatorId'],
                 $_REQUEST['abstract'],
-                $_REQUEST['sourceSHA256']
+                $_REQUEST['sourceSHA256'],
+                $_REQUEST['title']
             ))) === false) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
@@ -261,7 +257,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
 
     $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 1 von 2');
-    $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
+    $GLOBALS['adlerweb']['tpl']->assign('modul', 'create_upload');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
 }
 
