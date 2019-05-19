@@ -29,11 +29,10 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     ) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The specified file is not a picture or in an unknown format. ('.$mime.')'.$back);
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The specified file format is not allowed. ('.$mime.') Upload pdf'.$back);
         }elseif(!@move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-
             $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during capture.'.$back);
 
         }else{
@@ -55,7 +54,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $dupchk=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT paperId FROM `papers` WHERE `sourceSHA256` = ?;", 's', $hash);
             if($dupchk) {
                 $dupchk=$dupchk['paperId'];
-                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$dupchk.'">&raquo; To the detail page &raquo;</a></div>';
+                $back2='<div class="centered infobox_addtext"><a href="?m=paper_detail&id='.$dupchk.'">&raquo; To the detail page &raquo;</a></div>';
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'This document already exists in the system!'.$back2);
@@ -73,14 +72,14 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 }
                 $GLOBALS['adlerweb']['tpl']->assign('edate', $date);
 
-                if($exif && isset($exif['EXIF']) && count($exif['EXIF']) > 0) {
+               /* if($exif && isset($exif['EXIF']) && count($exif['EXIF']) > 0) {
                     $descr.='Daten der Kamera:'."\n";
                     $descr.='================='."\n";
                     foreach($exif["EXIF"] as $key => $value) {
                         if($key != 'MakerNote' && $key != 'ComponentsConfiguration' && $key != 'UserComment')
                             $abstract.=$key.' = '.$value."\n";
                     }
-                }
+                }*/
                 $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '1';");
                 $users = array();
                 $allowed = array();
@@ -146,11 +145,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $GLOBALS['adlerweb']['tpl']->assign('id', $id);
                 $GLOBALS['adlerweb']['tpl']->assign('date', $date);
                 $GLOBALS['adlerweb']['tpl']->assign('$abstract', htmlentities($abstract));
-              //  $GLOBALS['adlerweb']['tpl']->assign('ScanDate', strftime("%Y-%m-%d", time()));
                 $GLOBALS['adlerweb']['tpl']->assign('ScanUser', $_SESSION['adlerweb']['session']['user']);
-                //$GLOBALS['adlerweb']['tpl']->assign('ScanUserShort', $_SESSION['adlerweb']['session']['short']);
-                //$GLOBALS['adlerweb']['tpl']->assign('Format', gettopformat());
-              //  $GLOBALS['adlerweb']['tpl']->assign('titel', 'Erfassen - Schritt 2 von 2');
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'paper_create_form');
                 $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
                 $GLOBALS['adlerweb']['tpl']->assign('users', $users);
@@ -189,12 +184,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
         $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The cache file already exists.'.$back);
-    }/*elseif(!isset($_REQUEST['Sender']) || !isset($_REQUEST['Receiver']) || !($cids=getcontacts($_REQUEST['Sender'], $_REQUEST['Receiver']))) {
-//Die("here");
-        $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
-        $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-        $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The contacts could not be assigned.'.$back);
-    }*/else{
+    }else{
         $finfo = new finfo(FILEINFO_MIME);
         $mime = $finfo->file($source_path);
         $suffix=false;
@@ -225,7 +215,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             if(!$suffix) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Can not capture');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The source file has an unknown type.'.$back);
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The specified file format is not allowed. Upload pdf'.$back);
             }elseif(($GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO papers(paperId, dateUpload, lecturerId,
               studentNumber, clusterId, publishedStatus, coordinatorId, abstract, sourceSHA256, title)
               VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 9), array(
@@ -244,19 +234,19 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'A database error has occurred #103.'.$back);
             }else{
 
-                $back2='<div class="centered infobox_addtext"><a href="?m=content_detail&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
+                $back2='<div class="centered infobox_addtext"><a href="?m=paper_detail&id='.$itemid.'">&raquo; To the detail page &raquo;</a></div>';
                 $GLOBALS['adlerweb']['tpl']->assign('modul', 'error');
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Archive records successfully!');
-                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The archived material was successfully transferred to the database.Can not capture'.$back2);
+                $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The paper was successfully uploaded to the database'.$back2);
                 $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
-                //infomail("New Archive AdAR", $_REQUEST['Caption']);
+                infomail("New Paper Uploaded", "A new student report has been uploaded to the Honours Project Report Repository");
             }
         }
     }
 }else{
 
 
-    $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 1 von 2');
+    $GLOBALS['adlerweb']['tpl']->assign('titel', 'Capture - Step 1 of 2');
     $GLOBALS['adlerweb']['tpl']->assign('modul', 'create_upload');
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'paper_create');
 }

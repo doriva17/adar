@@ -2,8 +2,8 @@
     <div id="menu">
         
             <div class="menu_head">▸ Dashboard</div>
-            <div class="menu_item {if $menue=='content_list'}menu_item_selected{/if}">
-			<a href="?m=content_list"><img src="vendor/koala-framework/library-silkicons/table.png" /> All Reports</a></div>
+            <div class="menu_item {if $menue=='paper_list'}menu_item_selected{/if}">
+			<a href="?m=paper_list"><img src="vendor/koala-framework/library-silkicons/table.png" /> All Reports</a></div>
                   
         {if $loginlevel == ''}
         	<div class="menu_item {if $menue=='session_login'}menu_item_selected{/if}">
