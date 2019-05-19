@@ -1,4 +1,3 @@
-
 <?PHP
 
 $back='<div class="centered infobox_addtext"><a href="javascript:history.go(-1)">&laquo; For navigation use &laquo;</a></div>';
@@ -18,7 +17,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['Password'])
     && isset($_REQUEST['EMail'])
     && isset($_REQUEST['ContactNo'])
-    //&& isset($_REQUEST['Image'])
     && isset($_REQUEST['Active'])
     && isset($_REQUEST['Level'])
 ) {
@@ -33,7 +31,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
             $_REQUEST['EMail'],
             $_REQUEST['ContactNo'],
-            //$_REQUEST['Image'],
             $_REQUEST['Active'],
             $_REQUEST['Level']
         ))
@@ -52,7 +49,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `Password` = ?,
             `EMail` = ?,
             `ContactNo` = ?,
-
             `Active` = ?,
             `Level` = ?
             WHERE UserID = ?",
@@ -66,7 +62,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 				$GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
 				$_REQUEST['EMail'],
 				$_REQUEST['ContactNo'],
-				//$_REQUEST['Image'],
 				$_REQUEST['Active'],
 				$_REQUEST['Level'],
                 $_REQUEST['id']
@@ -102,7 +97,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         'Password' => '',
         'EMail' => '',
         'ContactNo' => '',
-      
         'Active' => '',
         'Level' => '',
         'UserID' => 0

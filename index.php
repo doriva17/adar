@@ -33,7 +33,8 @@ $modul='';
 if(isset($_REQUEST['m'])) $modul=$_REQUEST['m'];
 if(!preg_match('/[a-z]/', $modul)) {
     if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
-        $modul='session_login';
+        //$modul='session_login';
+        $modul='home';
     }else{
         $modul='content_list';
     }

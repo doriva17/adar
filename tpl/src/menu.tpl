@@ -1,25 +1,25 @@
 
     <div id="menu">
         {if $loginlevel >= 1}
-            <div class="menu_head">▸ Investigation</div>
-            <div class="menu_item {if $menue=='content_list'}menu_item_selected{/if}">
-			<a href="?m=content_list"><img src="vendor/koala-framework/library-silkicons/table.png" /> All Entries</a></div>
-            <div class="menu_head">▸ To capture</div>
-            <div class="menu_item {if $menue=='content_create'}menu_item_selected{/if}">
-			<a href="?m=content_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> New Data Set</a></div>
+            <div class="menu_head">▸ Main Menu</div>
+            <!--div class="menu_item {if $menue=='content_list'}menu_item_selected{/if}">
+			<a href="?m=content_list"><img src="vendor/koala-framework/library-silkicons/table.png" /> All Entries</a></div-->
+            <div class="menu_head">▸ For capture</div>
+            <!--div class="menu_item {if $menue=='content_create'}menu_item_selected{/if}">
+			<a href="?m=content_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> New Data Set</a></div-->
 
-	    <div class="menu_item {if $menue=='content_create'}menu_item_selected{/if}">
-			<a href="?m=content_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> New Paper</a></div>
+	    <div class="menu_item {if $menue=='paper_create'}menu_item_selected{/if}">
+			<a href="?m=paper_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> Capture a Paper</a></div>
 
 	    <div class="menu_item {if $menue=='cluster_create'}menu_item_selected{/if}">
 			<a href="?m=cluster_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> New Cluster</a></div>
 
-    	    <div class="menu_head">▸ Students & Papers</div>
-                <div class="menu_item {if $menue=='contact_create'}menu_item_selected{/if}">
-			    <a href="?m=contact_create"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> New contact</a></div>
+    	    <div class="menu_head">▸ For Viewing</div>
+                <!--div class="menu_item {if $menue=='contact_create'}menu_item_selected{/if}">
+			    <a href="?m=contact_create"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> New contact</a></div-->
 
                 <div class="menu_item {if $menue=='paper_list'}menu_item_selected{/if}">
-			    <a href="?m=paper_list"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> Paper Lists</a></div>
+			    <a href="?m=paper_list"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> View Papers</a></div>
 
                 <div class="menu_item {if $menue=='cluster_list'}menu_item_selected{/if}">
                 <a href="?m=cluster_list"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> Cluster Lists</a></div>
