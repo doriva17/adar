@@ -1,9 +1,11 @@
+
 <form action="index.php" method="POST">
     <fieldset>
 
         <legend>Name</legend>
         <table>
-            <tr><td><label for="FamilyName">Name / Company name:</label></td><td><input type="text" id="FamilyName" size="100%" {if $details.FamilyName !== null} value="{$details.FamilyName}"{/if} /></td><td></td></tr>
+            <tr><td><label for="FamilyName">Name / Company name:</label></td><td>
+			<input type="text" id="FamilyName" size="100%" {if $details.FamilyName !== null} value="{$details.FamilyName}"{/if} /></td><td></td></tr>
             <tr><td><label for="GivenName">First Given Name / Contact Person:</label></td><td><input type="text" id="GivenName"  size="100%" {if $details.GivenName !== null} value="{$details.GivenName}"{/if} /></td><td></td></tr>
             <tr><td><label for="Type">Type:</label></td><td>
                 <select name="Type">
@@ -21,9 +23,9 @@
     <fieldset>
         <legend>Address</legend>
         <table>
-            <tr><td><label for="Street">Street:</label></td><td><input type="text" id="Street" {if $details.Street !== null} value="{$details.Street}"{/if} /> 
+            <tr><td><label for="Street">Street:</label></td><td><input type="text" id="Street" {if $details.Street !== null} value="{$details.Street}"{/if} />
 			<input type="text" id="Housenr" size="6" {if $details.Housenr !== null} value="{$details.Housenr}"{/if} /></td></tr>
-            <tr><td><label for="ZIP">ZIP:</label></td><td><input type="text" id="ZIP" size="6" {if $details.ZIP !== null} value="{$details.ZIP}"{/if} /> 
+            <tr><td><label for="ZIP">ZIP:</label></td><td><input type="text" id="ZIP" size="6" {if $details.ZIP !== null} value="{$details.ZIP}"{/if} />
 			<input type="text" id="City" {if $details.City !== null} value="{$details.City}"{/if} /></td></tr>
             <tr><td><label for="Country">Country:</label></td><td>
                 <select name="Country">

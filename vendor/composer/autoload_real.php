@@ -18,8 +18,8 @@ class ComposerAutoloaderInite7deb6e369ef3db02dd642d01ac853f6
         if (null !== self::$loader) {
             return self::$loader;
         }
-
         spl_autoload_register(array('ComposerAutoloaderInite7deb6e369ef3db02dd642d01ac853f6', 'loadClassLoader'), true, true);
+
         self::$loader = $loader = new \Composer\Autoload\ClassLoader();
         spl_autoload_unregister(array('ComposerAutoloaderInite7deb6e369ef3db02dd642d01ac853f6', 'loadClassLoader'));
 

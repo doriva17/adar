@@ -7,7 +7,7 @@
         if(!isset($_GET['id']) || !preg_match('/^[A-Z]{2}_[0-9]{4}$/', $_GET['id'])) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'No entries');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
+            $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
             $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries in our archive that match your search criteria.');
         }else{
             $id=$_GET['id'];
@@ -31,12 +31,12 @@
             if(!$detail) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'No authorization');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
+                $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries in our archive that match your search criteria.');
             }elseif(!file_exists('data/cache/'.$id.'.png') && !file_exists('data/cache/'.$id.'-0.png')) {
                 $GLOBALS['adlerweb']['tpl']->assign('titel',  'Data Error');
                 $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-                $GLOBALS['adlerweb']['tpl']->assign('errico', 'exclamation');
+                $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
                 $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The record is corrupt');
             }else{
                 if(isset($_REQUEST['action']) && $_REQUEST['action'] == 'addtag' && $GLOBALS['adlerweb']['session']->session_isloggedin()) {

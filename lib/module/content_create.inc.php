@@ -8,7 +8,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to record new archive tracks.'.$back);
 }elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'Upload') {
     //File
-    $target_path = "data/tmp/";
+    $target_path = "data/tmp";
 
     if(!isset($_FILES['file']['tmp_name']) || $_FILES['file']['tmp_name'] == '') {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
@@ -33,6 +33,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
             $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during capture. Please contact the operator.'.$back);
+
         }else{
 
             if(preg_match('/[A-Z][A-Z]+_(\d{4})\./', $_FILES['file']['name'], $match)) {

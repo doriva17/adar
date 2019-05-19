@@ -36,8 +36,8 @@ class ATK_mysql {
     
     public function __construct($serv, $user, $pass, $datb) {
 		$serv = "localhost";
-		$user = "adar";
-		$pass = "adar";
+		$user = "root";
+		$pass = "";
 		$datb = "adar";
         $this->sql = new mysqli($serv, $user, $pass, $datb);
         $this->errno = $this->sql->connect_errno;
@@ -70,6 +70,7 @@ class ATK_mysql {
      * @see http://www.moyablog.com/2012/01/20/wrapper-php-classes-for-prepared-statements-queries/
      **/
     public function querystmt($sql, $argtypes, $args) {
+		
         if(strlen($argtypes) <1) {
             $msg = '[SQL] Argument types missing';
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
@@ -99,18 +100,22 @@ class ATK_mysql {
         
         $stmt = $this->sql->stmt_init();
         if(!$stmt->prepare($sql)) {
+			
             $msg = $stmt->error;
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
             if($this->debug >= 2) $msg .= ' - >>'.print_r($argtypes, true).'<< - >>'.print_r($args, true).'<<"';
             trigger_error($msg, E_USER_ERROR);
+			
         }
         call_user_func_array(array($stmt, "bind_param"), $this->util_refValues(array_merge((array)$argtypes, $args)));
         
         if(!$stmt->execute()) {
+			
             $msg = $stmt->error;
             if($this->debug >= 1) $msg .= ' - >>'.$sql.'<<"';
             if($this->debug >= 2) $msg .= ' - >>'.print_r($argtypes, true).'<< - >>'.print_r($args, true).'<<"';
             trigger_error($msg, E_USER_ERROR);
+			
         }
         
         if($type == 'INSERT') return $stmt->insert_id;
@@ -185,6 +190,7 @@ class ATK_mysql {
      *         returns mysqli_result on success
      **/
     public function query($sql) {
+		
         $ret = $this->sql->query($sql);
         if(!$ret) {
             $msg = '[SQL] SQL query error';
