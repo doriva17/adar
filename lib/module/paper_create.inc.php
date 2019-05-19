@@ -8,7 +8,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('errstr', 'You do not have the required rights to record new archive tracks.'.$back);
 
 }elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'Upload') {
-    //File
+    //hands File upload
 
     $target_path = "data/tmp/";
 
@@ -23,9 +23,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
     $finfo = new finfo(FILEINFO_MIME);
     $mime = $finfo->file($_FILES['file']['tmp_name']);
-        if(
-        !@getimagesize($_FILES['file']['tmp_name']) &&
-        strpos($mime, 'application/pdf') === false
+        if(strpos($mime, 'application/pdf') === false
     ) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
@@ -33,16 +31,16 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         }elseif(!@move_uploaded_file($_FILES['file']['tmp_name'], $target_path)) {
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'Error in the capture');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during capture.'.$back);
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'An unknown error occurred during uploading of file.'.$back);
 
         }else{
 
             if(preg_match('/[A-Z][A-Z]+_(\d{4})\./', $_FILES['file']['name'], $match)) {
                 $id=$match[1];
             }else{
-
-                $id=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT MAX(paperId) as UI_ID FROM `papers` WHERE `paperId` LIKE ?;", 's', '%%');
-
+		
+				//get the next ID in the sequence from papers
+                $id=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT MAX(paperId) as UI_ID FROM `papers` WHERE `paperId` LIKE ?;", 's', '%%');				
                 if($id) {
                     $id=$id['UI_ID']+1;
                     //die("id: ".($id));
@@ -50,7 +48,8 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                     $id=1;
                 }
             }
-
+			
+			//check if duplicate report in papers
             $dupchk=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT paperId FROM `papers` WHERE `sourceSHA256` = ?;", 's', $hash);
             if($dupchk) {
                 $dupchk=$dupchk['paperId'];
@@ -63,13 +62,13 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $abstract='';
 
                 $date = strftime("%Y-%m-%d", time());
-                $exif = false;
+                /*$exif = false;
                 if(function_exists('exif_read_data')) {
                     $exif = @exif_read_data($target_path, 0 , true);
                     if($exif && isset($exif["EXIF"]["DateTimeOriginal"])) {
                         $date = str_replace(":","-",substr($exif["EXIF"]["DateTimeOriginal"], 0, 10));
                     }
-                }
+                }*/
                 $GLOBALS['adlerweb']['tpl']->assign('edate', $date);
 
                /* if($exif && isset($exif['EXIF']) && count($exif['EXIF']) > 0) {
@@ -80,38 +79,38 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                             $abstract.=$key.' = '.$value."\n";
                     }
                 }*/
-                $lmlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '1';");
+               $supervisorlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '1';");
                 $users = array();
                 $allowed = array();
-                while($item = $lmlist->fetch_assoc()) {
+                while($item = $supervisorlist->fetch_assoc()) {
                     $users[]=$item;
                     $allowed[]=strtolower($item['UserID']);
                 }
 
-                    $clist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '4';");
-                    $cuser = array();
-                    $allowed = array();
-                    while($item = $clist->fetch_assoc()) {
-                        $cuser[]=$item;
-                        $allowed[]=strtolower($item['UserID']);
-                    }
+               $coordintorlist = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Name, Surname FROM users where Level = '4';");
+				$cuser = array();
+				$allowed = array();
+				while($item = $coordintorlist->fetch_assoc()) {
+					$cuser[]=$item;
+					$allowed[]=strtolower($item['UserID']);
+				}
 
-                    $clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
-                    $clusters = array();
-                    $allowed = array();
-                    while($item = $clusterslist->fetch_assoc()) {
-                        $clusters[]=$item;
-                        $allowed[]=strtolower($item['clusterId']);
-                    }
-                    $name = $_SESSION['adlerweb']['session']['user'];
-                    $loginuser = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users WHERE Username = '$name';");
+				$clusterslist = $GLOBALS['adlerweb']['sql']->query("SELECT clusterId, clustername FROM cluster;");
+				$clusters = array();
+				$allowed = array();
+				while($item = $clusterslist->fetch_assoc()) {
+					$clusters[]=$item;
+					$allowed[]=strtolower($item['clusterId']);
+				}
+				$fullname = $_SESSION['adlerweb']['session']['fullname'];
+				/*$loginuser = $GLOBALS['adlerweb']['sql']->query("SELECT UserID, Username FROM users WHERE Username = '$name';");
                     //$GLOBALS['adlerweb']['tpl']->assign('loginuser',  $loginuser);
                     $inuser = array();
                     $allowed = array();
                     while($item = $loginuser->fetch_assoc()) {
                         $inuser[]=$item;
                         $allowed[]=strtolower($item['UserID']);
-                    }
+                    }*/
                     //die (var_dump($))
 
                     $published_status = array("NO","YES");
@@ -151,7 +150,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
                 $GLOBALS['adlerweb']['tpl']->assign('users', $users);
                 $GLOBALS['adlerweb']['tpl']->assign('cuser', $cuser);
                 $GLOBALS['adlerweb']['tpl']->assign('clusters', $clusters);
-                $GLOBALS['adlerweb']['tpl']->assign('inuser', $inuser);
+                $GLOBALS['adlerweb']['tpl']->assign('fullname', $fullname);
                 $GLOBALS['adlerweb']['tpl']->assign('published_status', $published_status);
                 $GLOBALS['adlerweb']['tpl']->assign('details', $details);
                 $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
@@ -162,6 +161,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 
     }
 }elseif(isset($_REQUEST['a']) && $_REQUEST['a'] == 'To capture' && isset($_REQUEST['sourceSHA256'])) {
+	//hand paper create
     $source_path = "data/tmp/";
     $source_path .= $_REQUEST['sourceSHA256'];
     $target_path = "data/org/";
@@ -199,7 +199,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         if(
            !isset($_REQUEST['lecturerId'])
         || !isset($_REQUEST['abstract'])
-        || !isset($_REQUEST['studentNumber'])
+        || !isset($_REQUEST['student'])
         || !isset($_REQUEST['title'])
         || !isset($_REQUEST['coordinatorId'])) {
             $GLOBALS['adlerweb']['tpl']->assign ('titel',  'Can not capture');
@@ -221,7 +221,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
               VALUES (?, NOW(), ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 9), array(
                 $_REQUEST['paperId'],
                 $_REQUEST['lecturerId'],
-                $_REQUEST['studentNumber'],
+                getStudentNumber($_REQUEST['student']),
                 $_REQUEST['clusterId'],
                 $_REQUEST['publishedStatus'],
                 $_REQUEST['coordinatorId'],
@@ -280,6 +280,13 @@ function getcontact($name) {
     $detail=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT UserID FROM `users` WHERE Surname LIKE ? AND Username LIKE ?", 'ss', array($match[1], $match[2]));
     if(!$detail) return false;
     return $detail['UserID'];
+}
+
+function getStudentNumber($name) {
+    if(!preg_match("|^(.+), ([^,]*)$|", $name, $match)) return false;
+    $detail=$GLOBALS['adlerweb']['sql']->querystmt_single("SELECT studentNumber FROM `student` WHERE surname LIKE ? AND firstName LIKE ?", 'ss', array($match[1], $match[2]));
+    if(!$detail) return false;
+    return $detail['studentNumber'];
 }
 
 function gettopformat() {
