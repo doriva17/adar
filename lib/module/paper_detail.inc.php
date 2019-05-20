@@ -8,7 +8,7 @@
             $GLOBALS['adlerweb']['tpl']->assign('titel',  'No entries');
             $GLOBALS['adlerweb']['tpl']->assign('modul',  'error');
             $GLOBALS['adlerweb']['tpl']->assign('errico', 'Exclamation');
-            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries in our archive that match your search criteria.');
+            $GLOBALS['adlerweb']['tpl']->assign('errstr', 'There are no entries that match your search criteria.');
         }else{
             $id=$_GET['id'];
             $sqlq="SELECT

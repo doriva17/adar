@@ -168,12 +168,14 @@ elseif($requestData['source']=="users"){
 	//user management
 	$columns = array(
 // datatable column index  => database column name
-	1 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'Users'))),
-	2 => array(false, 'EMail', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'EMail'))),
-	3 => array(false, 'ContactNo', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'ContactNo'))),
-	4 => array(false, 'roleName', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'roleName'))),
-	5 => array(false, 'Active', false)
-
+	0 => array(false, 'UserID', false),
+	1 => array(false, 'Title', false),
+	2 => array('CONCAT(`Users`.`Name`,", ",`Users`.`Surname`)', 'Users', array('<a href="?m=user_create&id=%s">%s</a>', array('UserID', 'Users'))),
+	3 => array(false, 'Username', false),
+	4 => array(false, 'EMail', false),
+	5 => array(false, 'ContactNo', false),
+	6 => array(false, 'roleName', false),
+	7 => array(false, 'Active', false)
 
 );
 
@@ -208,6 +210,7 @@ $sql_anz = "SELECT COUNT(`Users`.`UserID`) as anz ";
 
 $sql_anz .= " FROM Users
 LEFT JOIN `Roles` AS `r` ON `r`.`roleID` = `users`.`Level` ";
+//join roles as r on r.roleID = users.Level
 
 // getting total number records without any external filters
 //$anzq=$GLOBALS['adlerweb']['sql']->query($sql_anz.$sql_filter);
@@ -239,12 +242,14 @@ for($i=0; $i<count($columns); $i++) {
 if(!empty($requestData['search']['value'])) {
     $sql_filter.="
         AND (
+            `UserID` LIKE ? OR
+            `Title` LIKE ? OR
             CONCAT(`Users`.`Name`,\", \",`Users`.`Surname`) LIKE ? OR
+            `Username` LIKE ? OR
             `EMail` LIKE ? OR
             `ContactNo` LIKE ? OR
-			`roleName` LIKE ? OR
-			`Active` LIKE ? OR
-
+			     `roleName` LIKE ? OR
+			     `Active` LIKE ? OR
         ) ";
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
@@ -307,11 +312,17 @@ elseif($requestData['source']=="papers"){
 	//paper management
 	$columns = array(
 // datatable column index  => database column name
-  0 => array(false, 'title', array('<a href="?m=paper_detail&id=%s">%s</a>', array('paperId', 'title'))),
-  1 => array(false, 'abstract', false),
-  2 => array(false, 'studentNumber', false),
+  0 => array(false, 'paperId', array('<a href="?m=content_detail&id=%s">%s</a>', array('paperId', 'paperId'))),
+  1=> array(false, 'dateUpload', false),
+  2 => array(false, 'title', false),
   3 => array(false, 'publishedStatus', false),
-  4=> array(false, 'dateUpload', false)
+  4 => array(false, 'abstract', false),
+  5 => array(false, 'dateModerated', false),
+	6 => array(false, 'studentNumber', false),
+  7 => array(false, 'coordinatorId', false),
+  8 => array(false, 'lecturerId', false),
+  9 => array(false, 'moderatorId', false),
+  10 => array(false, 'clusterId', false)
 
 
 );
@@ -340,13 +351,11 @@ foreach($columns as $col) {
 
 $sql_data = "SELECT ";
 $sql_data .= implode(", ", $colout);
-$sql_data .= " FROM papers
-LEFT JOIN `student` AS `s` ON `s`.`studentNumber` = `papers`.`studentNumber` ";
+$sql_data .= " FROM papers";
 
 $sql_anz = "SELECT COUNT(`papers`.`paperId`) as anz ";
 
-$sql_anz .= " FROM papers
-LEFT JOIN `student` AS `s` ON `s`.`studentNumber` = `papers`.`studentNumber` ";
+$sql_anz .= " FROM papers ";
 
 // getting total number records without any external filters
 //$anzq=$GLOBALS['adlerweb']['sql']->query($sql_anz.$sql_filter);
@@ -378,11 +387,16 @@ for($i=0; $i<count($columns); $i++) {
 if(!empty($requestData['search']['value'])) {
     $sql_filter.="
         AND (
-            `title` LIKE ? OR
-            `abstract` LIKE ? OR
-            `studentNumber` LIKE ? OR
-            `publishedStatus` LIKE ? OR
+            `paperId` LIKE ? OR
+            `dateModerated` LIKE ? OR
             `dateUpload` LIKE ? OR
+            `publishedStatus` LIKE ? OR
+            `studentNumber` LIKE ? OR
+            `abstract` LIKE ? OR
+            `coordinatorId` LIKE ? OR
+            `lecturerId` LIKE ? OR
+            `moderatorId` LIKE ? OR
+            `clusterId` LIKE ? OR
 
         ) ";
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
@@ -390,6 +404,12 @@ if(!empty($requestData['search']['value'])) {
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
         $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        $sql_filter_data[] = '%'.$requestData['search']['value'].'%';
+        //$sql_filter_data[] = '%'.$requestData['search']['value'].'%';
 
 }
 

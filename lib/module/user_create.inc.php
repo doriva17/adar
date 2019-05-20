@@ -14,7 +14,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     && isset($_REQUEST['Surname'])
     && isset($_REQUEST['Gender'])
     && isset($_REQUEST['Username'])
-    && isset($_REQUEST['Password'])
     && isset($_REQUEST['EMail'])
     && isset($_REQUEST['ContactNo'])
     && isset($_REQUEST['Active'])
@@ -22,6 +21,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 ) {
 
     if($_REQUEST['id'] == '0'
+
         && !$GLOBALS['adlerweb']['sql']->querystmt("INSERT INTO Users VALUES ('', ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )", str_repeat('s', 10), array(
             $_REQUEST['Title'],
             $_REQUEST['Name'],
@@ -46,7 +46,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
             `Surname` = ?,
             `Gender` = ?,
             `Username` = ?,
-            `Password` = ?,
             `EMail` = ?,
             `ContactNo` = ?,
             `Active` = ?,
@@ -59,7 +58,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
 				$_REQUEST['Surname'],
 				$_REQUEST['Gender'],
 				$_REQUEST['Username'],
-				$GLOBALS['adlerweb']['session']->session_getNewPasswordHash($_REQUEST['Password']),
 				$_REQUEST['EMail'],
 				$_REQUEST['ContactNo'],
 				$_REQUEST['Active'],
@@ -76,7 +74,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $GLOBALS['adlerweb']['tpl']->assign('titel',  'User successfully recorded!');
         $GLOBALS['adlerweb']['tpl']->assign('errstr', 'The user has been successfully transferred to the database. '.$back2);
         $GLOBALS['adlerweb']['tpl']->assign('errico', 'information');
-        infomail("New user AdAr", print_r($_REQUEST, true));
+        infomail("New User Created", "New user successfully created". print_r($_REQUEST['Name'], true));
     }
 }else{
 
@@ -94,7 +92,6 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         'Surname' => '',
         'Gender' => '',
         'Username' => '',
-        'Password' => '',
         'EMail' => '',
         'ContactNo' => '',
         'Active' => '',
