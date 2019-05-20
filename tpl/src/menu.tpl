@@ -15,7 +15,7 @@
                   <div class="menu_item {if $menue=='cluster_list'}menu_item_selected{/if}">
                 <a href="?m=cluster_list"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> Cluster Lists</a></div>
                 <div class="menu_item {if $menue=='cluster_create'}menu_item_selected{/if}">
-                <a href="?m=cluster_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> New C                <div class="menu_item {if $menue=='student_list'}menu_item_selected{/if}">
+                <a href="?m=cluster_create"><img src="vendor/koala-framework/library-silkicons/page_add.png" /> New Cluster</a></div>               <div class="menu_item {if $menue=='student_list'}menu_item_selected{/if}">
 			    <a href="?m=student_list"><img src="vendor/koala-framework/library-silkicons/user_add.png" /> Student List</a></div>
 
     	{/if}
