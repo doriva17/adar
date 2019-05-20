@@ -344,19 +344,23 @@ CREATE TABLE `Tags` (
 CREATE TABLE `Users` (
   `UserID` int(11) NOT NULL,
   `Name` varchar(150) NOT NULL,
-  `Nickname` varchar(50) NOT NULL COMMENT 'aka loginname',
+  `Surname` varchar(50) NOT NULL,
   `Password` varchar(72) NOT NULL COMMENT 'salted SHA256',
+  `Username` varchar(50) NOT NULL COMMENT 'aka loginname',
+  `Gender` varchar(150),
+  `Active` varchar(150),
   `EMail` varchar(150) NOT NULL,
-  `Level` int(11) NOT NULL DEFAULT '0' COMMENT 'binary system, not really documented yet',
-  `UIdent` varchar(2) NOT NULL COMMENT 'two chars used as user-identifier for document IDs'
+  `Title` varchar(150),
+  `Level` int(11) NOT NULL DEFAULT '0' COMMENT 'binary system, not really documented yet'
+  /*`UIdent` varchar(2) NOT NULL COMMENT 'two chars used as user-identifier for document IDs'*/
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 --
 -- Daten für Tabelle `Users`
 --
 
-INSERT INTO `Users` (`UserID`, `Name`, `Nickname`, `Password`, `EMail`, `Level`, `UIdent`) VALUES
-(1, 'admin', 'admin', '3469b67ebf2b71177c3fdb9da2c3fb0e0dec73a9e9a7e3e3516f6ba4813e52dc3f283c57', 'admin@localhost', 255, 'AD');
+INSERT INTO `Users` (`UserID`, `Name`, `Surname`, `Password`, `Username`, `Gender`, `Active`, `EMail`, `Title`, `Level`) VALUES
+(1, 'admin', 'Alfred', '3469b67ebf2b71177c3fdb9da2c3fb0e0dec73a9e9a7e3e3516f6ba4813e52dc3f283c57', 'admin', '', '', 'admin@localhost', '', 255);
 
 --
 -- Indizes der exportierten Tabellen
@@ -402,11 +406,9 @@ ALTER TABLE `Tags`
 --
 ALTER TABLE `Users`
   ADD PRIMARY KEY (`UserID`),
-  ADD UNIQUE KEY `Name` (`Name`),
   ADD UNIQUE KEY `EMail` (`EMail`),
-  ADD UNIQUE KEY `UIdent` (`UIdent`),
-  ADD UNIQUE KEY `Nickname` (`Nickname`),
-  ADD UNIQUE KEY `Login` (`Nickname`,`Password`);
+  ADD UNIQUE KEY `Username` (`Username`),
+  ADD UNIQUE KEY `Login` (`Username`,`Password`);
 
 --
 -- AUTO_INCREMENT für exportierte Tabellen

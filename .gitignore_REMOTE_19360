@@ -1,0 +1,11 @@
+composer.phar
+/vendor/
+config.php
+
+# Commit your application's lock file https://getcomposer.org/doc/01-basic-usage.md#commit-your-composer-lock-file-to-version-control
+# You may choose to ignore a library lock file http://getcomposer.org/doc/02-libraries.md#lock-file
+ composer.lock
+ composer.json
+ composer.phar
+doc/db/adar20190416.sql~566f3f6fb4e2b3177ba6615e77967fbdabc28150
+doc/db/adar.sql~566f3f6fb4e2b3177ba6615e77967fbdabc28150
