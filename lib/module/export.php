@@ -1,6 +1,6 @@
 <?php
 				if(!empty($_FILES["excel_file"])){
-			$connect = mysqli_connect("localhost", "root", "ramdyne", "adar");
+			$connect = mysqli_connect("localhost", "root", "", "adar");
 			$file_array = explode(".", $_FILES["excel_file"]["name"]);
 				if($file_array[1] == "xlsx"){
 				//include('C:\xampp\htdocs\Backup\adar-master\PHPExcel\IOFactory.php');

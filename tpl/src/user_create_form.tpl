@@ -1,3 +1,4 @@
+
 <form action="index.php" method="POST">
     <fieldset>
 
@@ -26,9 +27,8 @@
             </tr>
             <tr>
                 <td><label for="Gender">Gender:</label></td>
-                <td>
-                <input type="radio" name="Gender" {if $details.Gender == male} checked="checked"{/if} value="male"> Male<br>
-				<input type="radio" name="Gender" {if $details.Gender == female} checked="checked"{/if} value="female"> Female<br></td>
+                <td><input type="radio" name="Gender" value="male"> Male<br>
+				<input type="radio" name="Gender" value="female"> Female<br></td>
             </tr>
             <tr>
                 <td><label for="Username">Staff Number:</label></td>
@@ -60,8 +60,8 @@
 
             <tr>
 				<td><label for="Active">Active:</label></td>
-				<td><input type="radio" name="Active" {if $details.Active == Yes} checked="checked"{/if} value="Yes"> Yes<br>
-				<input type="radio" name="Active" {if $details.Active == No} checked="checked"{/if} value="No"> No<br></td>
+				<td><input type="radio" name="Active" value="Yes"> Yes<br>
+				<input type="radio" name="Active" value="No"> No<br></td>
 			</tr>
 
         </table>
@@ -79,4 +79,3 @@ function displayMsg() {
 }
 
 </script>
-

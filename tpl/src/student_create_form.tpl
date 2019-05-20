@@ -21,11 +21,18 @@
 			</tr>
             <tr>
 				<td><label for="gender">Gender:</label></td>
-				<td><input type="text" id="gender" {if $details.gender !== null} value="{$details.gender}"{/if} /></td>
+				<td><!--input type="text" id="gender" {if $details.gender !== null} value="{$details.gender}"{/if} /-->
+          <select id="gender" name="gender">
+              foreach($sex as $p){
+                <option value="{$sex[0]}">{$sex[0]}</option>
+                <option value="{$sex[1]}">{$sex[1]}</option>
+            }
+              </select>
+        </td>
 				<td></td>
 			</tr>
             <tr>
-				<td><label for="course">Course:</label></td>
+				<td><label for="course">Qualification:</label></td>
 				<td><input type="text" id="course" {if $details.course !== null} value="{$details.course}"{/if} /></td>
 				<td></td>
 			</tr>

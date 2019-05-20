@@ -1,3 +1,4 @@
+
 <form action="index.php" method="POST">
     <fieldset>
 
@@ -26,8 +27,9 @@
     <fieldset>
         <legend>Context</legend>
         <table>
-            <tr><td><label for="Sender">Sender:</label></td><td><input type="text" id="Sender" onfocus="dynReq(this, 'c', 'Contact', 1);" onkeyup="dynReq(this, 'c', 'Contact', 1);" onblur="dynReqBlur(this);" />
-			<div id="Sender_hint" style="position: absolute; background-color: #ccc;"></td></tr>
+            <tr><td><label for="Sender">Sender:</label></td><td>
+			<input type="text" id="Sender" onfocus="dynReq(this, 'c', 'Contact', 1);" onkeyup="dynReq(this, 'c', 'Contact', 1);" onblur="dynReqBlur(this);" />
+			<div id="Sender_hint" style="position: absolute; background-color: #ccc;">testing sender hint.</td></tr>
             <tr><td><label for="Receiver">Receiver:</label></td><td><input type="text" id="Receiver" onfocus="dynReq(this, 'c', 'Contact', 1);" onkeyup="dynReq(this, 'c', 'Contact', 1);" onblur="dynReqBlur(this);" />
 			<div id="Receiver_hint" style="position: absolute; background-color: #ccc;"></td></tr>
             <tr><td><label for="ScanUser">Captured by:</label></td><td><input type="text" id="ScanUser" value="{$ScanUser}" readonly="readonly" /></td></tr>
@@ -44,4 +46,3 @@
     <input type="hidden" name="m" value="content_create" />
     <input type="submit" name="a" value="To capture" />
 </form>
-

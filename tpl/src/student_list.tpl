@@ -6,10 +6,10 @@
             <th>Name </th>
             <th>Surname</th>
             <th>Gender</th>
-            <th>Course</th>
+            <th>Qualification</th>
         </tr>
     </thead>
-    <thead>
+    <!--thead>
         <tr>
             <td><input type="text" id="0" class="itemlist-input"></td>
             <td><input type="text" id="1" class="itemlist-input"></td>
@@ -18,7 +18,7 @@
             <td><input type="text" id="4" class="itemlist-input" ></td>
             <td><input type="text" id="5" class="itemlist-input" ></td>
         </tr>
-    </thead>
+    </thead-->
 </table>
 
 <a href="?m=student_create">

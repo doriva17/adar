@@ -63,7 +63,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
         $countries[]=$item;
         $allowed[]=strtolower($item['Alpha2']);
     }
-
+  $sex = array("MALE","FEMALE");
     $dummy = array(
         'studentNumber' => '',
         'firstName' => '',
@@ -90,6 +90,7 @@ if(!$GLOBALS['adlerweb']['session']->session_isloggedin()) {
     $GLOBALS['adlerweb']['tpl']->assign('menue', 'student_create');
     $GLOBALS['adlerweb']['tpl']->assign('countries', $countries);
     $GLOBALS['adlerweb']['tpl']->assign('details', $details);
+    $GLOBALS['adlerweb']['tpl']->assign('sex', $sex);
     $GLOBALS['adlerweb']['tpl']->assign('lang', $lang);
 }
 ?>

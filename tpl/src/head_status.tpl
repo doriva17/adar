@@ -1,4 +1,5 @@
 
+
     <div id="header_status">
         {if isset($user) && $user != ''}
             Logged in as <strong>{$fullname}</strong><br />
